@@ -7,9 +7,8 @@ using namespace std;
 constexpr auto WIDTH = 400;
 constexpr auto HEIGHT = 400;
 
-//	include desired libraries if needed
-#include "../lib_Point/Point.h"
-#include "../lib_Slider/Slider.h"
+//	include desired header files for libraries
+//	example : #include "../lib_Point/Point.h"
 
 //	entry point of application
 int main(int argc, char** argv) {
@@ -27,43 +26,53 @@ int main(int argc, char** argv) {
 	//SDL_ShowCursor(SDL_DISABLE);	//	hide mouse cursor
 	SDL_ShowCursor(SDL_ENABLE);	//	show mouse cursor
 
-	//	create the window and its renderer
+	//	create the window and its associated renderer
 	fenetre = SDL_CreateWindow("SDL template", 200, 100, WIDTH, HEIGHT, 0);
 	renderer = SDL_CreateRenderer(fenetre, 0, 0);
 #pragma endregion
 
-	//	prepare usefull objects here
-	//	****************************
+	//	****************************  //
+	//	prepare usefull objects here  //
+	//	****************************  //
 
-	//	main loop here
-	//	**************
+
+
+	//	**************  //
+	//	main loop here  //
+	//	**************  //
 	while (true) {
-		//	draw image
-		//	**********
+		//	******************************  //
+		//	draw image in rendering buffer  //
+		//	******************************  //
 
 		//	- clear window
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderClear(renderer);
 
-		//	- draw any desired graphical object
+		//	- draw any desired graphical objects here
 
 
-		//	event management
-		//	****************
 
-		//	remove next event from queue
+		//	****************  //
+		//	event management  //
+		//	****************  //
+
+		//	- remove next event from queue
 		SDL_Event event;
 		SDL_PollEvent(&event);
 
-		//	give event to objects for update
+		//	- give event to objects for update if needed
 
 
-		//	show rendering buffer
-		//	*********************
+
+		//	*********************  //
+		//	show rendering buffer  //
+		//	*********************  //
 		SDL_RenderPresent(renderer);
 
-		//	check keypress for exit
-		//	***************************
+		//	***********************  //
+		//	check keypress for exit  //
+		//	***********************  //
 		if (event.type == SDL_KEYDOWN) {
 			break;
 		}
