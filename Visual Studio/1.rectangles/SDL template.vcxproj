@@ -23,7 +23,7 @@
     <ProjectGuid>{AEB1E0DC-6F37-43E0-ABED-71D11580B69C}</ProjectGuid>
     <RootNamespace>SDLtemplate</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>rectangles</ProjectName>
+    <ProjectName>1.rectangles</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
