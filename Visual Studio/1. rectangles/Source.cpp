@@ -13,6 +13,36 @@ constexpr auto HEIGHT = 600;
 //	on donne des noms aux indices du tableau de pointeurs de sliders
 enum { MARGE_GAUCHE, MARGE_HAUT, LONGUEUR, HAUTEUR, ESPACEMENT_X, ESPACEMENT_Y };
 
+void premierRectangle(SDL_Rect& rect, Slider* sliders[]) {
+	rect.x = sliders[MARGE_GAUCHE]->getValue();
+	rect.y = sliders[MARGE_HAUT]->getValue();
+	rect.w = sliders[LONGUEUR]->getValue();
+	rect.h = sliders[HAUTEUR]->getValue();
+}
+
+void rectangleDroit(SDL_Rect& rect, Slider* sliders[]) {
+	rect.x += sliders[LONGUEUR]->getValue() + sliders[ESPACEMENT_X]->getValue();
+}
+
+void rectangleRetourLigne(SDL_Rect& rect, Slider* sliders[]) {
+	rect.x = sliders[MARGE_GAUCHE]->getValue();		//	retour au debut de la ligne
+	rect.y += sliders[HAUTEUR]->getValue() + sliders[ESPACEMENT_Y]->getValue();	//	ligne suivante
+}
+
+bool rectangleVisible(SDL_Rect& rect) {
+	return rect.x + rect.w <= 300 && rect.y + rect.h <= 200;
+}
+
+int calculerLignes(Slider sliders[], int with, int height) {
+	//	a faire
+	return -1;
+}
+
+int calculerColonnes(Slider sliders[], int with, int height) {
+	//	a faire
+	return -1;
+}
+
 //	entry point of application
 int main(int argc, char** argv) {
 
@@ -46,7 +76,7 @@ int main(int argc, char** argv) {
 		//	i%2  0  1  0  1  0  1
 		int x = 20 + (i / 2) * (100 + 30);
 		int y = 550 + (i % 2) * 30;
-		sliders[i] = new Slider(x, y, 100, 1, 300, 30);
+		sliders[i] = new Slider(x, y, 100, 0, 100, 30);
 	}
 
 	//	rectangle utilise pour l'affichage
@@ -66,18 +96,31 @@ int main(int argc, char** argv) {
 
 		//	- draw any desired graphical objects here
 
+		//	affichage de la ligne qui separe les 2 zones (zone des rectangles et zone des sliders)
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawLine(renderer, 0, 500, WIDTH, 500);
+
 		//	affichage du rectangle en haut a gauche
 		SDL_SetRenderDrawColor(renderer, 200, 255, 50, SDL_ALPHA_OPAQUE);
+		int nbLignes = 0, nbRectangles = 0;
+		bool finAffichage = false;
+		premierRectangle(rect, sliders);
+		while (!finAffichage) {
+			if (rectangleVisible(rect)) {
+				SDL_RenderFillRect(renderer, &rect);
+				nbRectangles++;
+				rectangleDroit(rect, sliders);
+			}
+			else {
+				nbLignes++;
+				rectangleRetourLigne(rect, sliders);
+				if (!rectangleVisible(rect)) {
+					finAffichage = true;
+				}
+			}
+		}
 
-		rect.x = sliders[MARGE_GAUCHE]->getValue();
-		rect.y = sliders[MARGE_HAUT]->getValue();
-		rect.w = sliders[LONGUEUR]->getValue();
-		rect.h = sliders[HAUTEUR]->getValue();
-		SDL_RenderFillRect(renderer, &rect);
-
-		//	affichage du rectangle a droite du premier
-		rect.x += sliders[LONGUEUR]->getValue() + sliders[ESPACEMENT_X]->getValue();
-		SDL_RenderFillRect(renderer, &rect);
+		cout << nbRectangles << ", " << nbLignes << ", " << nbRectangles / nbLignes << endl;
 
 		//	****************  //
 		//	event management  //
@@ -101,9 +144,9 @@ int main(int argc, char** argv) {
 		//	***********************  //
 		//	check keypress for exit  //
 		//	***********************  //
-		if (event.type == SDL_KEYDOWN) {
+		/*if (event.type == SDL_KEYDOWN) {
 			break;
-		}
+		}*/
 	}
 
 #pragma region SDL quit
