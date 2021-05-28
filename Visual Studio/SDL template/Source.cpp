@@ -3,20 +3,25 @@ using namespace std;
 
 #include <SDL.h>
 
-//	size of window on screen
+//	********************
+//	* window attributs *
+//	********************
+//	- position on screen
+constexpr auto POS_X = 200;
+constexpr auto POS_Y = 100;
+
+//	- size on screen
 constexpr auto WIDTH = 400;
 constexpr auto HEIGHT = 400;
 
 //	include desired header files for libraries
-//	example : #include "../lib_Point/Point.h"
+#include "../lib_Point/Point.h"
+#include "../lib_Slider/Slider.h"
 
-//	entry point of application
-int main(int argc, char** argv) {
-
+SDL_Renderer* init_SDL(const char* title) {
 #pragma region SDL initialization
 	// SDL initialization
-	SDL_Window* fenetre = NULL;
-	SDL_Renderer* renderer = NULL;
+	SDL_Window* window = NULL;
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		cout << "ERREUR : can't initialize SDL!" << endl;
@@ -27,9 +32,21 @@ int main(int argc, char** argv) {
 	SDL_ShowCursor(SDL_ENABLE);	//	show mouse cursor
 
 	//	create the window and its associated renderer
-	fenetre = SDL_CreateWindow("SDL template", 200, 100, WIDTH, HEIGHT, 0);
-	renderer = SDL_CreateRenderer(fenetre, 0, 0);
+	window = SDL_CreateWindow(title, POS_X, POS_Y, WIDTH, HEIGHT, 0);
+	return SDL_CreateRenderer(window, 0, 0);
 #pragma endregion
+}
+
+void quit_SDL() {
+#pragma region SDL quit
+	//	quit SDL
+	SDL_Quit();
+#pragma endregion
+}
+
+//	entry point of application
+int main(int argc, char** argv) {
+	SDL_Renderer* renderer = init_SDL("SLD template");
 
 	//	****************************  //
 	//	prepare usefull objects here  //
@@ -37,9 +54,9 @@ int main(int argc, char** argv) {
 
 
 
-	//	**************  //
-	//	main loop here  //
-	//	**************  //
+	//	*********  //
+	//	main loop  //
+	//	*********  //
 	while (true) {
 		//	******************************  //
 		//	draw image in rendering buffer  //
@@ -78,11 +95,7 @@ int main(int argc, char** argv) {
 		}
 	}
 
-#pragma region SDL quit
-	//	destroy window and quit SDL
-	SDL_DestroyWindow(fenetre);
-	SDL_Quit();
-#pragma endregion
+	quit_SDL();
 
 	return 0;
 }
