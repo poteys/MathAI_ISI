@@ -3,9 +3,9 @@ using namespace std;
 
 #include <SDL.h>
 
-//	********************
-//	* window attributs *
-//	********************
+//	****************
+//	window attributs
+//	****************
 //	- position on screen
 constexpr auto POS_X = 200;
 constexpr auto POS_Y = 100;
@@ -37,6 +37,26 @@ SDL_Renderer* init_SDL(const char* title) {
 #pragma endregion
 }
 
+void clearWindow(SDL_Renderer* renderer) {
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_RenderClear(renderer);
+}
+
+void showRenderingBuffer(SDL_Renderer* renderer) {
+	SDL_RenderPresent(renderer);
+}
+
+SDL_Event getNextEvent() {
+	SDL_Event event;
+	SDL_PollEvent(&event);
+
+	return event;
+}
+
+bool keypressed(SDL_Event& event, char key) {
+	return event.type == SDL_KEYDOWN && event.key.keysym.sym == key;
+}
+
 void quit_SDL() {
 #pragma region SDL quit
 	//	quit SDL
@@ -46,27 +66,25 @@ void quit_SDL() {
 
 //	entry point of application
 int main(int argc, char** argv) {
-	SDL_Renderer* renderer = init_SDL("SLD template");
+	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
+	bool endOfGame = false;
 
-	//	****************************  //
-	//	prepare usefull objects here  //
-	//	****************************  //
-
-
+	//	***********************  //
+	//	prepare usefull objects  //
+	//	***********************  //
+	//	--	code here	--	//
 
 	//	*********  //
 	//	main loop  //
 	//	*********  //
-	while (true) {
+	while (!endOfGame) {
 		//	******************************  //
 		//	draw image in rendering buffer  //
 		//	******************************  //
+		clearWindow(renderer);
 
-		//	- clear window
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderClear(renderer);
-
-		//	- draw any desired graphical objects here
+		//	- draw any desired graphical objects
+		//	--	code here	--	//
 
 
 
@@ -75,24 +93,14 @@ int main(int argc, char** argv) {
 		//	****************  //
 
 		//	- remove next event from queue
-		SDL_Event event;
-		SDL_PollEvent(&event);
+		SDL_Event event = getNextEvent();
 
 		//	- give event to objects for update if needed
+		//	--	code here	--	//
 
+		showRenderingBuffer(renderer);
 
-
-		//	*********************  //
-		//	show rendering buffer  //
-		//	*********************  //
-		SDL_RenderPresent(renderer);
-
-		//	***********************  //
-		//	check keypress for exit  //
-		//	***********************  //
-		if (event.type == SDL_KEYDOWN) {
-			break;
-		}
+		endOfGame = keypressed(event, 'q');
 	}
 
 	quit_SDL();
