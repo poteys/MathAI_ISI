@@ -67,16 +67,18 @@ void quit_SDL() {
 //	entry point of application
 int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
-	bool endOfGame = false;
 
 	//	***********************  //
 	//	prepare usefull objects  //
 	//	***********************  //
 	//	--	code here	--	//
 
+
+
 	//	*********  //
 	//	main loop  //
 	//	*********  //
+	bool endOfGame = false;
 	while (!endOfGame) {
 		//	******************************  //
 		//	draw image in rendering buffer  //
@@ -91,12 +93,12 @@ int main(int argc, char** argv) {
 		//	****************  //
 		//	event management  //
 		//	****************  //
-
-		//	- remove next event from queue
 		SDL_Event event = getNextEvent();
 
 		//	- give event to objects for update if needed
 		//	--	code here	--	//
+
+
 
 		showRenderingBuffer(renderer);
 
