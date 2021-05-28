@@ -7,6 +7,9 @@ using namespace std;
 constexpr auto WIDTH = 600;
 constexpr auto HEIGHT = 600;
 
+//	hauteur de la zone des sliders en bas de la fenetre
+constexpr auto HAUTEUR_SLIDERS = 100;
+
 //	include desired header files for libraries
 #include "../lib_Slider/Slider.h"
 
@@ -30,7 +33,7 @@ void rectangleRetourLigne(SDL_Rect& rect, Slider* sliders[]) {
 }
 
 bool rectangleVisible(SDL_Rect& rect) {
-	return rect.x + rect.w <= 300 && rect.y + rect.h <= 200;
+	return rect.x + rect.w <= WIDTH && rect.y + rect.h <= 500;
 }
 
 int calculerLignes(Slider sliders[], int with, int height) {
@@ -75,7 +78,7 @@ int main(int argc, char** argv) {
 		//	i/2	 0  0  1  1  2  2
 		//	i%2  0  1  0  1  0  1
 		int x = 20 + (i / 2) * (100 + 30);
-		int y = 550 + (i % 2) * 30;
+		int y = HEIGHT - HAUTEUR_SLIDERS + 50 + (i % 2) * 30;
 		sliders[i] = new Slider(x, y, 100, 0, 100, 30);
 	}
 
