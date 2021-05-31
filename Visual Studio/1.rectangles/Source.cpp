@@ -17,19 +17,19 @@ constexpr auto HAUTEUR_SLIDERS = 100;
 enum { MARGE_GAUCHE, MARGE_HAUT, LONGUEUR, HAUTEUR, ESPACEMENT_X, ESPACEMENT_Y };
 
 void premierRectangle(SDL_Rect& rect, Slider* sliders[]) {
-	rect.x = sliders[MARGE_GAUCHE]->getValue();
-	rect.y = sliders[MARGE_HAUT]->getValue();
-	rect.w = sliders[LONGUEUR]->getValue();
-	rect.h = sliders[HAUTEUR]->getValue();
+	rect.x = (int)sliders[MARGE_GAUCHE]->getValue();
+	rect.y = (int)sliders[MARGE_HAUT]->getValue();
+	rect.w = (int)sliders[LONGUEUR]->getValue();
+	rect.h = (int)sliders[HAUTEUR]->getValue();
 }
 
 void rectangleDroit(SDL_Rect& rect, Slider* sliders[]) {
-	rect.x += sliders[LONGUEUR]->getValue() + sliders[ESPACEMENT_X]->getValue();
+	rect.x += (int)(sliders[LONGUEUR]->getValue() + sliders[ESPACEMENT_X]->getValue());
 }
 
 void rectangleRetourLigne(SDL_Rect& rect, Slider* sliders[]) {
-	rect.x = sliders[MARGE_GAUCHE]->getValue();		//	retour au debut de la ligne
-	rect.y += sliders[HAUTEUR]->getValue() + sliders[ESPACEMENT_Y]->getValue();	//	ligne suivante
+	rect.x = (int)sliders[MARGE_GAUCHE]->getValue();		//	retour au debut de la ligne
+	rect.y += (int)(sliders[HAUTEUR]->getValue() + sliders[ESPACEMENT_Y]->getValue());	//	ligne suivante
 }
 
 bool rectangleVisible(SDL_Rect& rect) {
