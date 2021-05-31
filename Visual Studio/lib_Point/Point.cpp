@@ -31,39 +31,39 @@ bool Point::isDragged() {
 	return Point::isDragMode;
 }
 
-//	méthodes spécifiques
+//	specific methods
 double Point::sqrDist(const Point &p) const {
 	double dx = this->x - p.x;
 	double dy = this->y - p.y;
 	return dx * dx + dy * dy;
 }
-void Point::draw(SDL_Renderer *renderer, Color c, int taille) const {
+void Point::draw(SDL_Renderer *renderer, Color c, int size) const {
 	SDL_Rect rect;
-	rect.w = taille;
-	rect.h = taille;
-	rect.x = (int)(x - taille / 2.0);
-	rect.y = (int)(y - taille / 2.0);
+	rect.w = size;
+	rect.h = size;
+	rect.x = (int)(x - size / 2.0);
+	rect.y = (int)(y - size / 2.0);
 
 	SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
 	SDL_RenderFillRect(renderer, &rect);
 }
 
-void Point::drawCircle(SDL_Renderer *renderer, int rayon, Color c, bool continu) const {
+void Point::drawCircle(SDL_Renderer *renderer, int radius, Color c, bool continuous) const {
 	SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
 
 	//	compute points
-	int nbPoints = rayon;
-	double delta = 2 * M_PI / rayon;	//	1/r to have exactly one pixel each cycle of the loop
+	int nbPoints = radius;
+	double delta = 2 * M_PI / radius;	//	1/r to have exactly one pixel each cycle of the loop
 	SDL_Point *tabPoints = new SDL_Point[(long long)nbPoints + 1];
 	double alpha = 0;
 	for (int i = 0; i < nbPoints; i++) {
-		tabPoints[i].x = (int)(this->x + rayon * cos(alpha) + 0.5);
-		tabPoints[i].y = (int)(this->y + rayon * sin(alpha) + 0.5);
+		tabPoints[i].x = (int)(this->x + radius * cos(alpha) + 0.5);
+		tabPoints[i].y = (int)(this->y + radius * sin(alpha) + 0.5);
 		alpha += delta;
 	}
 
 	//	draw
-	if (continu) {
+	if (continuous) {
 		tabPoints[nbPoints] = tabPoints[0];
 		SDL_RenderDrawLines(renderer, tabPoints, nbPoints + 1);
 	}
@@ -207,6 +207,6 @@ double Vector::operator^(const Vector &v2) const {
 }
 
 //	scalar product in regular order
-Vector operator*(double k, const Vector &v) {
+Vector operator*(const double k, const Vector &v) {
 	return Vector(k * v.x, k* v.y);
 }

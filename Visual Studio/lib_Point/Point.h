@@ -74,4 +74,4 @@ public:
 };
 
 //	scalar product in regular order
-Vector operator*(double k, const Vector &v);
+Vector operator*(const double k, const Vector &v);
