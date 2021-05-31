@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
 		//	- draw any desired graphical object
 		Color color(0, 255, 0, SDL_ALPHA_OPAQUE);
 		point.draw(renderer, color, 5);
-		point.drawCircle(renderer, slider.getValue(), color, true);
+		point.drawCircle(renderer, (int)slider.getValue(), color, true);
 
 		//	event management
 		//	****************
