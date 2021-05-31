@@ -20,10 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{93343A34-5B71-4303-A0FA-B7D13F8993FE}</ProjectGuid>
-    <RootNamespace>SDLtemplate</RootNamespace>
+    <ProjectGuid>{B6DC61EF-9296-4D9D-994E-EBFEB213643A}</ProjectGuid>
+    <RootNamespace>2.pointleplusproche</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>2.point le plus proche</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
