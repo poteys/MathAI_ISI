@@ -16,7 +16,7 @@ constexpr auto WIDTH = 400;
 constexpr auto HEIGHT = 400;
 
 //	nombre de points
-constexpr auto NB_POINTS = 1000;
+constexpr auto NB_POINTS = 10;
 
 //	include desired header files for libraries
 #include "../lib_Point/Point.h"

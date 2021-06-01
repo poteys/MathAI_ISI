@@ -3,20 +3,15 @@ using namespace std;
 
 #include <SDL.h>
 
-//	****************
-//	window attributs
-//	****************
-//	- position on screen
-constexpr auto POS_X = 200;
-constexpr auto POS_Y = 100;
-
-//	- size on screen
-constexpr auto WIDTH = 400;
-constexpr auto HEIGHT = 400;
+//	****************  //
+//	window attributs  //
+//	****************  //
+//	- position and size on screen
+constexpr auto POS_X = 200, POS_Y = 100;
+constexpr auto WIDTH = 400, HEIGHT = 400;
 
 //	include desired header files for libraries
 #include "../lib_Point/Point.h"
-#include "../lib_Slider/Slider.h"
 
 SDL_Renderer* init_SDL(const char* title) {
 #pragma region SDL initialization
@@ -68,12 +63,8 @@ void quit_SDL() {
 int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
 
-	//	***********************  //
-	//	prepare usefull objects  //
-	//	***********************  //
-	//	--	code here	--	//
-
-
+	/*	prepare useful objects here	*/
+	Point p(WIDTH / 2, HEIGHT / 2, true);
 
 	//	*********  //
 	//	main loop  //
@@ -85,20 +76,16 @@ int main(int argc, char** argv) {
 		//	******************************  //
 		clearWindow(renderer);
 
-		//	- draw any desired graphical objects
-		//	--	code here	--	//
-
-
+		/*	draw any desired graphical objects here	*/
+		p.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 10);
 
 		//	****************  //
 		//	event management  //
 		//	****************  //
 		SDL_Event event = getNextEvent();
 
-		//	- give event to objects for update if needed
-		//	--	code here	--	//
-
-
+		/*	give event to objects for update if needed here	*/
+		p.update(event);
 
 		showRenderingBuffer(renderer);
 
