@@ -71,7 +71,8 @@ Point fromPlanToScreen(Point p,
 	double xMinS, double xMaxS, double yMinS, double yMaxS) {
 
 	double x = xMinS + (p.x - xMin) * (xMaxS - xMinS) / (xMax - xMin);
-	double y = yMinS + (yMax - p.y) * (yMaxS - yMinS) / (yMax - yMin);
+	//double y = yMinS + (yMax - p.y) * (yMaxS - yMinS) / (yMax - yMin);
+	double y = yMaxS - (p.y - yMin) * (yMaxS - yMinS) / (yMax - yMin);
 
 	Point result(x, y);
 
