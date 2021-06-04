@@ -47,7 +47,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "2.point le plus proche", "2
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3.trace de fonctions", "3.trace de fonctions\fonctions.vcxproj", "{69B4B687-FA50-45A2-AE6D-DDB388C7BB40}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ex trigonometrie", "ex trigonometrie\ex trigonometrie.vcxproj", "{C903F7E6-C456-4311-A39E-0CD34904AC78}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4.ex trigonometrie", "ex trigonometrie\ex trigonometrie.vcxproj", "{C903F7E6-C456-4311-A39E-0CD34904AC78}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "5.ex cercle", "5.ex cercle\5.ex cercle.vcxproj", "{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -199,6 +201,16 @@ Global
 		{C903F7E6-C456-4311-A39E-0CD34904AC78}.Release|x64.Build.0 = Debug|x64
 		{C903F7E6-C456-4311-A39E-0CD34904AC78}.Release|x86.ActiveCfg = Release|Win32
 		{C903F7E6-C456-4311-A39E-0CD34904AC78}.Release|x86.Build.0 = Release|Win32
+		{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E}.Debug|x64.ActiveCfg = Debug|x64
+		{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E}.Debug|x64.Build.0 = Debug|x64
+		{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E}.Debug|x86.ActiveCfg = Debug|Win32
+		{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E}.Debug|x86.Build.0 = Debug|Win32
+		{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E}.Release|Any CPU.ActiveCfg = Release|Win32
+		{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E}.Release|x64.ActiveCfg = Debug|x64
+		{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E}.Release|x64.Build.0 = Debug|x64
+		{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E}.Release|x86.ActiveCfg = Release|Win32
+		{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -224,6 +236,7 @@ Global
 		{B6DC61EF-9296-4D9D-994E-EBFEB213643A} = {75E6BFC0-1535-4BE3-B060-757865C24C15}
 		{69B4B687-FA50-45A2-AE6D-DDB388C7BB40} = {75E6BFC0-1535-4BE3-B060-757865C24C15}
 		{C903F7E6-C456-4311-A39E-0CD34904AC78} = {75E6BFC0-1535-4BE3-B060-757865C24C15}
+		{3961C1A4-D5E9-4BA1-8A6F-FC0454B2B06E} = {75E6BFC0-1535-4BE3-B060-757865C24C15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F900EBAB-9C56-40A2-9B36-0BEB4A8B8B02}
