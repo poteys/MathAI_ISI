@@ -93,6 +93,85 @@ double computeAngle(const Vector& v1, const Vector& v2) {
 
 //	3. distance d'un bateau a la cote
 //	---------------------------------
+/*
+--------------------------------------------
+Premier raisonnement (avec la loi des sinus)
+--------------------------------------------
+
+loi des sinus
+
+Dans un triangle ABC :
+(on note BC=a, AC=b et AB=c)
+sin(A)/a = sin(B)/b = sin(C)/c
+-------------------------------------
+
+on note teta = 180-(alpha+beta)
+on note C le sommet bateau
+
+loi des sinus dans le triangle (ABC) :
+sin(alpha)/BC? = sin(beta)/AC? = sin(teta)/L
+
+sin(alpha)/BC? = sin(teta)/L
+	 on multiplie par BC des 2 cotes
+sin(alpha) = BC*sin(teta)/L
+	on divise par (sin(teta)/L) des 2 cotes
+sin(alpha)/sin(teta)*L = BC
+
+loi des sinus dans le triangle (BCD)
+sin(beta)/d? = sin(180-beta)/BD? = sin(90)/BC
+
+sin(beta)/d? = sin(90)/BC = 1/BC
+	on multiplie par d x BC des 2 cotes
+BC*sin(beta) = d
+
+on remplace BC par la valeur trouvee plus haut
+sin(alpha)/sin(teta)*L*sin(beta) = d
+
+donc d = L * sin(alpha)* sin(beta) / sin(teta)
+
+d = L * sin(alpha)* sin(beta) / sin(180 - (alpha+beta))
+
+---------------------
+Deuxieme raisonnement
+---------------------
+
+(1) tan(alpha) = d? / L1?
+(2) tan(beta) = d? / L2?
+(3) L1? + L2? = L
+
+systeme de 3 equations a 3 inconnues
+
+dans (1), on exprime L1 en fonction de alpha et d
+(1)  =>  L1 = d/tan(alpha)
+
+on remplace cette valeur de L1 dan (2) et (3)
+
+(2) ne change pas : tan(beta) = d / L2
+(3) d/tan(alpha) + L2 = L
+
+dans (2), on exprime L2 en fonction de alpha et d
+(2)	 =>  L2 = d/tan(beta)
+
+on remplace cette valeur de L2 dans (3)
+
+(3) => d/tan(alpha) + d/tan(beta) = L
+
+on multiplie par tan(alpha)*tan(beta) des 2 cotes
+
+d.tan(beta) + d.tan(alpha) = L.tan(alpha).tan(beta)
+d.(tan(beta) + tan(alpha)) = ...
+
+d = L.tan(alpha).tan(beta) / (tan(beta) + tan(alpha))
+*/
+double computeDistanceFromCoast(double L, double alpha, double beta) {
+	//	conversion des angles en radians
+	alpha *= M_PI / 180;
+	beta *= M_PI / 180;
+
+	//return L * sin(alpha) * sin(beta) / sin(alpha + beta);
+
+	return L * tan(alpha) * tan(beta) / (tan(beta) + tan(alpha));
+}
 
 
 //	entry point of application
@@ -114,6 +193,15 @@ int main(int argc, char** argv) {
 	Point points[3] = { Point(WIDTH / 2, HEIGHT / 2, true) ,
 						Point(WIDTH * 2 / 3, HEIGHT / 2, true),
 						Point(WIDTH / 2 + 50, HEIGHT / 2 - 150, true) };
+
+
+	//	3. distance d'un bateau a la cote
+	//	---------------------------------
+	double L = 1000, alpha1 = 45, beta1 = 30;
+	//double L = 500, alpha1 = 60, beta1 = 70;
+	//double L = 100, alpha1 = 40, beta1 = 40;
+	cout << computeDistanceFromCoast(L, alpha1, beta1) << endl;
+
 
 	//	*********  //
 	//	main loop  //
@@ -139,7 +227,7 @@ int main(int argc, char** argv) {
 		//	invesion des y car l'axe des Y sur l'ecran est dirige vers le bas
 		v1.y = -v1.y;
 		v2.y = -v2.y;
-		cout << computeAngle(v1, v2) * 180 / M_PI << endl;
+		//cout << computeAngle(v1, v2) * 180 / M_PI << endl;
 
 		//	****************  //
 		//	event management  //
