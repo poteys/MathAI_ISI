@@ -23,6 +23,7 @@
     <ProjectGuid>{C903F7E6-C456-4311-A39E-0CD34904AC78}</ProjectGuid>
     <RootNamespace>SDLtemplate</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>4.ex trigonometrie</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
