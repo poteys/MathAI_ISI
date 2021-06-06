@@ -39,7 +39,7 @@ void Circle::drawWithSqrt(SDL_Renderer* renderer, Color color) {
 
 void Circle::drawWithSqrtSmart(SDL_Renderer* renderer, Color color) {
 	this->center.draw(renderer, color, 5);
-	Point p(0, 0);
+	Point p;
 
 	int x = 0, y;
 	do {
@@ -82,7 +82,6 @@ void Circle::drawWithSqrtSmart(SDL_Renderer* renderer, Color color) {
 		x++;
 	} while ((x - 1) < y);
 }
-
 
 bool Circle::contains(Point p)
 {
