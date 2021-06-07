@@ -100,6 +100,28 @@ Point computeClosestPoint(Point mainPoint, Point points[], int nbPoints) {
 	return closestPointToDate;
 }
 
+//	get elapsed time in milliseconds
+clock_t readTimeMillis() {
+	return clock();
+}
+
+clock_t getElapsedTimeMillis(clock_t start, clock_t end) {
+	return end - start;
+}
+
+//	get elapsed time in nanoseconds
+__time64_t readTimeNano() {
+	struct _timespec64 ts;
+	if (_timespec64_get(&ts, TIME_UTC) == 0) {
+		throw 0;
+	}
+
+	return ts.tv_sec * 1000000000 + ts.tv_nsec;
+}
+
+__time64_t getElapsedTimeNano(__time64_t start, __time64_t end) {
+	return end - start;
+}
 
 
 //	entry point of application
@@ -130,10 +152,12 @@ int main(int argc, char** argv) {
 	//	*********  //
 	bool endOfGame = false;
 
-	clock_t start, end;
+	clock_t startMillis, endMillis;
+	__time64_t startNano, endNano;
 
 	while (!endOfGame) {
-		start = clock();
+		startMillis = readTimeMillis();
+		startNano = readTimeNano();
 
 		//	******************************  //
 		//	draw image in rendering buffer  //
@@ -167,10 +191,19 @@ int main(int argc, char** argv) {
 
 		endOfGame = keypressed(event, 'q');
 
-		end = clock();
-		clock_t ellapsed = end - start;
-		int fps = (int)((double)CLOCKS_PER_SEC / ellapsed);
-		cout << fps << " FPS" << endl;
+
+		endMillis = readTimeMillis();
+		endNano = readTimeNano();
+
+		clock_t elapsedMillis = getElapsedTimeMillis(startMillis, endMillis);
+		cout << elapsedMillis << " millis, ";
+		__time64_t elapsedNano = getElapsedTimeNano(startNano, endNano);
+		cout << elapsedNano << " nano, ";
+
+		int fps = (int)((double)CLOCKS_PER_SEC / elapsedMillis);
+		cout << fps << ", ";
+		fps = (int)((double)1e9 / elapsedNano);
+		cout << fps << endl;
 	}
 
 	quit_SDL();
