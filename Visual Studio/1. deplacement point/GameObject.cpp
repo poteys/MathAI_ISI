@@ -39,8 +39,9 @@ void GameObject::update() {
 	//	compute sum of forces pallyed on object
 	Vector gravity(0, 9.81 * this->mass);
 	Vector wind(-50, 0);
+	Vector friction = -0.2 * this->speed;
 	Vector spring(0, -this->position.y / 5);
-	Vector sum = gravity + spring;
+	Vector sum = gravity + spring + friction;
 
 	// compute new acceleration of object now
 	this->acceleration.x = sum.x / mass;
