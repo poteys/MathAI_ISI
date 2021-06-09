@@ -36,7 +36,7 @@ void GameObject::update() {
 	this->speed.y = this->speed.y + this->acceleration.y * deltaT;
 	//	OR this->speed = this->speed + this->acceleration * deltaT;		//	using library operators
 
-	//	compute sum of forces apllyed on object
+	//	compute sum of forces applied on object
 	Vector gravity(0, 9.81 * this->mass);
 	Vector wind(-50, 0);
 	Vector friction = -0.2 * this->speed;
