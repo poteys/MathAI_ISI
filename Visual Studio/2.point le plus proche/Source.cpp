@@ -8,7 +8,7 @@ using namespace std;
 //	window attributs
 //	****************
 //	- position on screen
-constexpr auto POS_X = 1920 + 200;
+constexpr auto POS_X = -1000; // 1920 + 200;
 constexpr auto POS_Y = 100;
 
 //	- size on screen

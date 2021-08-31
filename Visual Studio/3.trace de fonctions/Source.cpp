@@ -7,7 +7,8 @@ using namespace std;
 //	window attributs  //
 //	****************  //
 //	- position and size on screen
-constexpr auto POS_X = 1920 + 200, POS_Y = 100;		//	ATTENTION au 1920 !!!!
+constexpr auto POS_X = -1000;	// 1920 + 200;
+constexpr auto POS_Y = 100;
 constexpr auto WIDTH = 600, HEIGHT = 600;
 
 //	specifications au the drawing window

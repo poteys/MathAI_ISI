@@ -6,6 +6,8 @@ using namespace std;
 //	size of window on screen
 constexpr auto WIDTH = 600;
 constexpr auto HEIGHT = 600;
+constexpr auto xWindow = -1000;
+constexpr auto yWindow = 100;
 
 //	hauteur de la zone des sliders en bas de la fenetre
 constexpr auto HAUTEUR_SLIDERS = 100;
@@ -63,7 +65,7 @@ int main(int argc, char** argv) {
 	SDL_ShowCursor(SDL_ENABLE);	//	show mouse cursor
 
 	//	create the window and its associated renderer
-	fenetre = SDL_CreateWindow("SDL template", 1920 + 200, 100, WIDTH, HEIGHT, 0);
+	fenetre = SDL_CreateWindow("SDL template", xWindow, yWindow, WIDTH, HEIGHT, 0);
 	renderer = SDL_CreateRenderer(fenetre, 0, 0);
 #pragma endregion
 
@@ -147,9 +149,9 @@ int main(int argc, char** argv) {
 		//	***********************  //
 		//	check keypress for exit  //
 		//	***********************  //
-		/*if (event.type == SDL_KEYDOWN) {
+		if (event.type == SDL_KEYDOWN) {
 			break;
-		}*/
+		}
 	}
 
 #pragma region SDL quit

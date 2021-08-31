@@ -3,7 +3,9 @@ using namespace std;
 
 #include <SDL.h>
 
-//	size of window on screen
+//	- position and size on screen
+constexpr auto POS_X = -1000;	//	 1920 + 200;
+constexpr auto POS_Y = 100;
 constexpr auto WIDTH = 600;
 constexpr auto HEIGHT = 600;
 
@@ -28,7 +30,7 @@ int main(int argc, char** argv) {
 	SDL_ShowCursor(SDL_ENABLE);	//	show mouse cursor
 
 	//	create the window and its renderer
-	fenetre = SDL_CreateWindow("exemple 1", 1920 + 200, 100, WIDTH, HEIGHT, 0);
+	fenetre = SDL_CreateWindow("exemple 1", POS_X, POS_Y, WIDTH, HEIGHT, 0);
 	renderer = SDL_CreateRenderer(fenetre, 0, 0);
 #pragma endregion
 

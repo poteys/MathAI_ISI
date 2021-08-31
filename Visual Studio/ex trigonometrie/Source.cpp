@@ -7,7 +7,8 @@ using namespace std;
 //	window attributs  //
 //	****************  //
 //	- position and size on screen
-constexpr auto POS_X = 1920 + 200, POS_Y = 100;
+constexpr auto POS_X = -1000;	// 1920 + 200;
+constexpr auto POS_Y = 100;
 constexpr auto WIDTH = 400, HEIGHT = 400;
 
 //	include desired header files for libraries

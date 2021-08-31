@@ -9,7 +9,8 @@ constexpr auto MAX_OBJECTS = 150;
 //	window attributs  //
 //	****************  //
 //	- position and size on screen
-constexpr auto POS_X = -1280 + 200, POS_Y = 100;
+constexpr auto POS_X = -1000;	// -1280 + 200;
+constexpr auto POS_Y = 100;
 constexpr auto WIDTH = 600, HEIGHT = 400;
 
 //	include desired header files for libraries
