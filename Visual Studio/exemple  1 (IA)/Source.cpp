@@ -11,7 +11,7 @@ using namespace std;
 constexpr int POS_X = -1000, POS_Y = 100;
 constexpr int WIDTH = 600, HEIGHT = 600;
 
-constexpr int nbCandidates = 1000;
+constexpr int nbCandidates = 100;
 constexpr double xMin = -10;
 constexpr double xMax = +10;
 constexpr double yMin = -10;
@@ -84,18 +84,20 @@ int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
 
 	/*	prepare useful objects here	*/
+	Perceptron perceptron(2);
+
 	vector<Point> candidates;
 	for (int i = 0; i < nbCandidates; i++) {
-		candidates.push_back(Point(Perceptron::getRandomRange(-8, 8),
-			Perceptron::getRandomRange(-8, 8)));
+		candidates.push_back(Point(Perceptron::getRandomRange(-9.5, 9.5),
+			Perceptron::getRandomRange(-9.5, 9.5)));
 	}
 	double a = Perceptron::getRandomRange(-1, 1);
 	double b = Perceptron::getRandomRange(-1, 1);
 	double c = Perceptron::getRandomRange(-1, 1);
 
 	vector<int> categories;
-	for (int i = 0; i < candidates.size(); i++) {
-		if (a*candidates[i].x + b * candidates[i].y + c < 0) {
+	for (auto candidate : candidates) {
+		if (a*candidate.x + b * candidate.y + c < 0) {
 			categories.push_back(-1);
 		}
 		else {
@@ -103,11 +105,10 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	Perceptron perceptron(2);
-
 	//	*********  //
 	//	main loop  //
 	//	*********  //
+	int nbFramesBeforeTraining = 500;
 	bool endOfGame = false;
 	bool isPerceptronTrained = true;
 	while (!endOfGame) {
@@ -144,21 +145,20 @@ int main(int argc, char** argv) {
 		}
 
 		//	show candidates to Perceptron
-		isPerceptronTrained = true;
-		double X[2];
-		for (int i = 0; i < candidates.size(); i++) {
-			X[0] = candidates[i].x;
-			X[1] = candidates[i].y;
-			if (!perceptron.learn(X, categories[i])) {
-				isPerceptronTrained = false;
+		nbFramesBeforeTraining--;
+		if (nbFramesBeforeTraining == 0) {
+			nbFramesBeforeTraining = 100;
+
+			isPerceptronTrained = true;
+			double X[2];
+			for (int i = 0; i < candidates.size(); i++) {
+				X[0] = candidates[i].x;
+				X[1] = candidates[i].y;
+				if (!perceptron.learn(X, categories[i])) {
+					isPerceptronTrained = false;
+				}
 			}
 		}
-
-		/*perceptron.W[0] = -1;
-		perceptron.W[1] = -1;
-		perceptron.teta = -5;*/
-
-
 
 		//	****************  //
 		//	event management  //
