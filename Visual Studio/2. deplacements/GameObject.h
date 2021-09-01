@@ -10,8 +10,8 @@ private:
 	Vector speed;
 	Vector acceleration;
 
-	double maxSpeed = 10;	//	 100;
-	double maxAcceleration = 0.1;	//	 300;
+	double maxSpeed = 100;
+	double maxAcceleration = 200;
 
 	clock_t lastMove = clock();
 

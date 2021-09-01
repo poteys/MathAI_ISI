@@ -51,18 +51,19 @@ void GameObject::followLerp(Point target) {
 
 void GameObject::followRealistic(Point target) {
 	if (this->inRange(target, 2)) {
+		this->position = target;
 		this->acceleration = Vector(0, 0);
 		this->speed = Vector(0, 0);
 	}
 	else {
 		Vector AB(this->position, target);
-		/*AB.normalize();
-		AB *= this->maxSpeed;*/
-		GameObject::constrainVector(AB, this->maxSpeed);
+		AB.normalize();
+		AB *= this->maxSpeed;
+		//GameObject::constrainVector(AB, this->maxSpeed);
 
 		this->acceleration = AB - this->speed;
-		//this->acceleration.normalize();
-		//this->acceleration *= this->maxAcceleration;
-		GameObject::constrainVector(this->acceleration, this->maxAcceleration);
+		this->acceleration.normalize();
+		this->acceleration *= this->maxAcceleration;
+		//GameObject::constrainVector(this->acceleration, this->maxAcceleration);
 	}
 }
