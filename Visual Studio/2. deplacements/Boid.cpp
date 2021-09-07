@@ -21,11 +21,18 @@ Boid::Boid(Point position, Vector speed) :speed(speed), acceleration(0, 0) {
 }
 
 void Boid::draw(SDL_Renderer* renderer, Color color, int width, int height) {
+	//	draw droid body
 	this->position.draw(renderer, color, 5);
 
+	//	draw boid speed
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-	SDL_RenderDrawLine(renderer, this->position.x, this->position.y,
-		this->position.x + 0.25 * this->speed.x, this->position.y + 0.25 * this->speed.y);
+	SDL_RenderDrawLine(renderer, (int)this->position.x, (int)this->position.y,
+		(int)(this->position.x + 0.25 * this->speed.x), (int)(this->position.y + 0.25 * this->speed.y));
+
+	//	draw all 3 regions
+	this->position.drawCircle(renderer, (int)this->separationRadius, Color(255, 0, 0, SDL_ALPHA_OPAQUE), true);
+	this->position.drawCircle(renderer, (int)this->alignmentRadius, Color(255, 255, 255, SDL_ALPHA_OPAQUE), false);
+	this->position.drawCircle(renderer, (int)this->cohesionRadius, Color(0, 255, 0, SDL_ALPHA_OPAQUE), true);
 }
 
 void Boid::update(int width, int height) {
@@ -75,13 +82,16 @@ void Boid::followRealistic(Point target) {
 }
 
 
-Vector Boid::separationBehaviour(Flock aFlock, double radius) {
+Vector Boid::separationBehaviour(Flock aFlock) {
 	Vector targetAcceleration(0, 0);
 	int nbNeighbours = 0;
 
 	for (Boid* boid : aFlock.boids) {
-		if (boid != this && boid->position.sqrDist(this->position) <= radius * radius) {
-			targetAcceleration += Vector(this->position, boid->position);
+		if (boid != this && boid->position.sqrDist(this->position) <= this->separationRadius * this->separationRadius) {
+			double d = this->position.sqrDist(boid->position);
+			if (d != 0) {
+				targetAcceleration += Vector(this->position, boid->position) / d / d;
+			}
 			nbNeighbours++;
 		}
 	}
@@ -101,14 +111,14 @@ Vector Boid::separationBehaviour(Flock aFlock, double radius) {
 	return targetAcceleration;
 }
 
-Vector Boid::alignmentBehaviour(Flock aFlock, double minRadius, double maxRadius) {
+Vector Boid::alignmentBehaviour(Flock aFlock) {
 	Vector targetAcceleration(0, 0);
 	int nbNeighbours = 0;
 
 	for (Boid* boid : aFlock.boids) {
 		if (boid != this) {
 			double sqrDist = boid->position.sqrDist(this->position);
-			if (sqrDist >= minRadius * minRadius && sqrDist < maxRadius * maxRadius) {
+			if (sqrDist >= this->separationRadius * separationRadius && sqrDist < this->alignmentRadius * this->alignmentRadius) {
 				targetAcceleration += boid->speed;
 				nbNeighbours++;
 			}
@@ -119,7 +129,7 @@ Vector Boid::alignmentBehaviour(Flock aFlock, double minRadius, double maxRadius
 
 		targetAcceleration.normalize();
 		targetAcceleration *= this->maxSpeed;
-		
+
 		targetAcceleration = targetAcceleration - this->speed;
 		targetAcceleration.normalize();
 		targetAcceleration *= this->maxAcceleration;
@@ -128,14 +138,14 @@ Vector Boid::alignmentBehaviour(Flock aFlock, double minRadius, double maxRadius
 	return targetAcceleration;
 }
 
-Vector Boid::cohesionBehaviour(Flock aFlock, double minRadius, double maxRadius) {
+Vector Boid::cohesionBehaviour(Flock aFlock) {
 	Vector targetAcceleration(0, 0);
 	int nbNeighbours = 0;
 
 	for (Boid* boid : aFlock.boids) {
 		if (boid != this) {
 			double sqrDist = boid->position.sqrDist(this->position);
-			if (sqrDist >= minRadius * minRadius && sqrDist < maxRadius * maxRadius) {
+			if (sqrDist >= this->alignmentRadius * this->alignmentRadius && sqrDist < this->cohesionRadius * this->cohesionRadius) {
 				targetAcceleration += Vector(boid->position.x, boid->position.y);
 				nbNeighbours++;
 			}

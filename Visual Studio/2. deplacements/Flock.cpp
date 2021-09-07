@@ -4,28 +4,34 @@ double Flock::rangeRandom(double min, double max) {
 	return min + (max - min)*(double)rand() / RAND_MAX;
 }
 
-Flock::Flock(int nbBoids, int width, int height) {
-	srand(time(NULL));
+Flock::Flock(int width, int height) {
+	srand((unsigned int)time(NULL));
+
+	this->width = width;
+	this->height = height;
 
 	double sizeArea = 50;
-	for (int i = 0; i < nbBoids; i++) {
-		Point position(Flock::rangeRandom(0, width - 1), Flock::rangeRandom(0, height - 1));
+}
+
+void Flock::setPopulation(int nbBoids) {
+	while(this->boids.size() < nbBoids) {
+		Point position(Flock::rangeRandom(0, this->width - 1), Flock::rangeRandom(0, this->height - 1));
 		Vector speed(50 - Flock::rangeRandom(0, 100), 50 - Flock::rangeRandom(0, 100));
 		this->boids.push_back(new Boid(position, speed));
+	}
+	while(this->boids.size() > nbBoids) {
+		this->boids.pop_back();
 	}
 }
 
 void Flock::draw(SDL_Renderer* renderer,
 	double separationCoeff, double alignmentCoeff, double cohesionCoeff,
 	int width, int height) {
-	double separationRadius = 50;
-	double alignmentRadius = 80;
-	double cohesionRadius = 100;
 
 	for (int i = 0; i < this->boids.size(); i++) {
-		Vector separationAcceleration = this->boids[i]->separationBehaviour(*this, separationRadius);
-		Vector alignmentAcceleration = this->boids[i]->alignmentBehaviour(*this, separationRadius, alignmentRadius);
-		Vector cohesionAcceleration = this->boids[i]->cohesionBehaviour(*this, alignmentRadius, cohesionRadius);
+		Vector separationAcceleration = this->boids[i]->separationBehaviour(*this);
+		Vector alignmentAcceleration = this->boids[i]->alignmentBehaviour(*this);
+		Vector cohesionAcceleration = this->boids[i]->cohesionBehaviour(*this);
 
 		this->boids[i]->acceleration =
 			separationCoeff * separationAcceleration +

@@ -2,6 +2,7 @@
 using namespace std;
 
 #include "../lib_Slider/Slider.h"
+#include "../lib_Point/Point.h"
 #include "Boid.h"
 #include "Flock.h"
 
@@ -12,13 +13,12 @@ using namespace std;
 //	window attributs  //
 //	****************  //
 //	- position and size on screen
-constexpr auto POS_X = -1000, POS_Y = 100;
-constexpr auto WIDTH = 600, HEIGHT = 600;
+constexpr auto POS_X = -1000, POS_Y = 50;
+constexpr auto WIDTH = 800, HEIGHT = 800;
 
 SDL_Renderer* renderer;
 
 //	include desired header files for libraries
-#include "../lib_Point/Point.h"
 
 SDL_Renderer* init_SDL(const char* title) {
 #pragma region SDL initialization
@@ -120,11 +120,12 @@ void testPartI() {
 
 void testPartII() {
 	/*	prepare useful objects here	*/
-	Flock theFlock(100, WIDTH, HEIGHT);
+	Flock theFlock(WIDTH, HEIGHT);
 
 	Slider sliderSeparation(20, 20, 150, 0, 2, 0.5);
 	Slider sliderAlignment(200, 20, 150, 0, 2, 0.5);
 	Slider sliderCohesion(380, 20, 150, 0, 2, 0.5);
+	Slider sliderPopulation(20, 40, 150, 0, 100, 0);
 
 	//	*********  //
 	//	main loop  //
@@ -141,6 +142,7 @@ void testPartII() {
 		SDL_GetMouseState(&x, &y);
 		Point target(x, y);
 
+		theFlock.setPopulation((int)sliderPopulation.getValue());
 		theFlock.draw(renderer,
 			sliderSeparation.getValue(), sliderAlignment.getValue(), sliderCohesion.getValue(),
 			WIDTH, HEIGHT);
@@ -154,6 +156,7 @@ void testPartII() {
 		sliderSeparation.draw(renderer, event);
 		sliderAlignment.draw(renderer, event);
 		sliderCohesion.draw(renderer, event);
+		sliderPopulation.draw(renderer, event);
 
 		showRenderingBuffer(renderer);
 

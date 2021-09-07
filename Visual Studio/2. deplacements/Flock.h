@@ -15,7 +15,10 @@ public:
 
 	static double rangeRandom(double min, double max);
 
-	Flock(int nbBoids, int width, int height);
+	int width, height;
+
+	Flock(int width, int height);
+	void setPopulation(int nbBoids);
 	void draw(SDL_Renderer* renderer,
 		double separationCoeff, double alignmentCoeff, double cohesionCoeff,
 		int width, int height);

@@ -13,8 +13,12 @@ public:
 	Vector speed;
 	Vector acceleration;
 
-	double maxSpeed = 300;
-	double maxAcceleration = 50;
+	double maxSpeed = 200;
+	double maxAcceleration = 200;
+
+	double separationRadius = 50;
+	double alignmentRadius = 80;
+	double cohesionRadius = 100;
 
 	clock_t lastUpdate = clock();
 
@@ -32,7 +36,7 @@ public:
 	void followLerp(Point target);
 	void followRealistic(Point target);
 
-	Vector separationBehaviour(Flock aFlock, double radius);
-	Vector alignmentBehaviour(Flock aFlock, double minRadius, double maxRadius);
-	Vector cohesionBehaviour(Flock aFlock, double minRadius, double maxRadius);
+	Vector separationBehaviour(Flock aFlock);
+	Vector alignmentBehaviour(Flock aFlock);
+	Vector cohesionBehaviour(Flock aFlock);
 };
