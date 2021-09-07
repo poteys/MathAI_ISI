@@ -68,13 +68,13 @@ int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
 
 	/*	prepare useful objects here	*/
-	GameObject object(5, Point(0, HEIGHT / 2), Vector(100, 0), WIDTH, HEIGHT);
+	Boid object(5, Point(0, HEIGHT / 2), Vector(100, 0), WIDTH, HEIGHT);
 
-	GameObject* tabObjects[MAX_OBJECTS];
+	Boid* tabObjects[MAX_OBJECTS];
 	for (int i = 0; i < MAX_OBJECTS; i++) {
 		Point position(rand() % WIDTH, rand() % HEIGHT);
 		Vector speed(15 - rand() % 30, 15 - rand() % 30);
-		tabObjects[i] = new GameObject(5, position, speed, WIDTH, HEIGHT);
+		tabObjects[i] = new Boid(5, position, speed, WIDTH, HEIGHT);
 	}
 
 	long time = clock();

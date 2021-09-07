@@ -2,7 +2,7 @@
 
 #include "../lib_Point/Point.h"
 
-class GameObject {
+class Boid {
 private:
 	double mass;
 
@@ -19,7 +19,7 @@ private:
 
 public:
 	//	constructor
-	GameObject(double mass, Point position, Vector speed, int width, int height);
+	Boid(double mass, Point position, Vector speed, int width, int height);
 
 	//	getters and setters
 	Point getPosition();

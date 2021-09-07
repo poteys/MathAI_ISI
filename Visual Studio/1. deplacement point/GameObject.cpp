@@ -1,7 +1,7 @@
 #include "GameObject.h"
 #include <time.h>
 
-__time64_t GameObject::getTimeInNanoSeconds()
+__time64_t Boid::getTimeInNanoSeconds()
 {
 	struct _timespec64 ts;
 	if (_timespec64_get(&ts, TIME_UTC) == 0) {
@@ -11,14 +11,14 @@ __time64_t GameObject::getTimeInNanoSeconds()
 	return ts.tv_sec * 1000000000 + ts.tv_nsec;
 }
 
-GameObject::GameObject(double mass, Point position, Vector speed, int width, int height) : position(position), speed(speed), acceleration(0, 0) {
+Boid::Boid(double mass, Point position, Vector speed, int width, int height) : position(position), speed(speed), acceleration(0, 0) {
 	this->mass = mass;
 	this->lastUpdate = this->getTimeInNanoSeconds();
 	this->width = width;
 	this->height = height;
 }
 
-void GameObject::update() {
+void Boid::update() {
 	__time64_t currentUpdate = this->getTimeInNanoSeconds();
 
 	//	compute elapsed time (in seconds) since last position change
@@ -53,19 +53,19 @@ void GameObject::update() {
 	//	OR this->acceleration = sum / mass;		//	using library operators
 }
 
-Point GameObject::getPosition() {
+Point Boid::getPosition() {
 	return this->position;
 }
 
-Vector GameObject::getSpeed() {
+Vector Boid::getSpeed() {
 	return this->speed;
 }
 
-void GameObject::setSpeed(Vector newSpeed) {
+void Boid::setSpeed(Vector newSpeed) {
 	this->speed = newSpeed;
 }
 
-void GameObject::draw(SDL_Renderer* renderer, Color color) {
+void Boid::draw(SDL_Renderer* renderer, Color color) {
 	this->update();
 
 	//	check borders of screen
