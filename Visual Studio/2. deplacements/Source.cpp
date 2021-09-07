@@ -1,7 +1,10 @@
 #include <iostream>
 using namespace std;
 
-#include "GameObject.h"
+#include "../lib_Slider/Slider.h"
+#include "Boid.h"
+#include "Flock.h"
+
 #include <SDL.h>
 #include <time.h>
 
@@ -10,7 +13,9 @@ using namespace std;
 //	****************  //
 //	- position and size on screen
 constexpr auto POS_X = -1000, POS_Y = 100;
-constexpr auto WIDTH = 400, HEIGHT = 400;
+constexpr auto WIDTH = 600, HEIGHT = 600;
+
+SDL_Renderer* renderer;
 
 //	include desired header files for libraries
 #include "../lib_Point/Point.h"
@@ -61,15 +66,11 @@ void quit_SDL() {
 #pragma endregion
 }
 
-//	entry point of application
-int main(int argc, char** argv) {
-	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
-
+void testPartI() {
 	/*	prepare useful objects here	*/
-	GameObject object(Point(WIDTH / 2, HEIGHT / 2));
-	Vector A(0, 0);
-	//Vector B(WIDTH, HEIGHT);
-	double alpha = 0;
+	Boid object(Point(WIDTH / 2, HEIGHT / 2), Vector(0, 0));
+
+	double alpha = 0;	//	for Lerp
 
 	//	*********  //
 	//	main loop  //
@@ -95,10 +96,12 @@ int main(int argc, char** argv) {
 
 		//	Lerp movement (starting point is always the position of the object)
 		//object.followLerp(target);
-		object.followRealistic(target);
-		object.update();
 
-		object.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE));
+		//	following the target (with speed and acceleration)
+		object.followRealistic(target);
+		object.update(WIDTH, HEIGHT);
+
+		object.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), WIDTH, HEIGHT);
 
 		//	****************  //
 		//	event management  //
@@ -113,6 +116,59 @@ int main(int argc, char** argv) {
 
 		SDL_Delay(15);
 	}
+}
+
+void testPartII() {
+	/*	prepare useful objects here	*/
+	Flock theFlock(100, WIDTH, HEIGHT);
+
+	Slider sliderSeparation(20, 20, 150, 0, 2, 0.5);
+	Slider sliderAlignment(200, 20, 150, 0, 2, 0.5);
+	Slider sliderCohesion(380, 20, 150, 0, 2, 0.5);
+
+	//	*********  //
+	//	main loop  //
+	//	*********  //
+	bool endOfGame = false;
+	while (!endOfGame) {
+		//	******************************  //
+		//	draw image in rendering buffer  //
+		//	******************************  //
+		clearWindow(renderer);
+
+		/*	draw any desired graphical objects here	*/
+		int x, y;
+		SDL_GetMouseState(&x, &y);
+		Point target(x, y);
+
+		theFlock.draw(renderer,
+			sliderSeparation.getValue(), sliderAlignment.getValue(), sliderCohesion.getValue(),
+			WIDTH, HEIGHT);
+
+		//	****************  //
+		//	event management  //
+		//	****************  //
+		SDL_Event event = getNextEvent();
+
+		/*	give event to objects for update if needed here	*/
+		sliderSeparation.draw(renderer, event);
+		sliderAlignment.draw(renderer, event);
+		sliderCohesion.draw(renderer, event);
+
+		showRenderingBuffer(renderer);
+
+		endOfGame = keypressed(event, 'q');
+
+		SDL_Delay(15);
+	}
+}
+
+//	entry point of application
+int main(int argc, char** argv) {
+	renderer = init_SDL("SLD template");	//	this object will draw in our window
+
+	//testPartI();
+	testPartII();
 
 	quit_SDL();
 
