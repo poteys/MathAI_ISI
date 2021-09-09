@@ -71,7 +71,7 @@ public:
 
 	void buttonPushed(void *source) {	//	event handler
 		Button* btn = (Button *)source;
-		cout << "Button #" << btn->getName().c_str() << endl;
+		cout << "Button \"" << btn->getName().c_str() << "\"" << endl;
 
 		if (btn->getName() == "point") {
 			this->showPoint = !this->showPoint;
@@ -97,8 +97,8 @@ int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
 
 	/*	prepare useful objects here	*/
-	Button btnShowPoint("point", 50, 20, 50, 20);
-	Button btnShowCircle("circle", 150, 20, 50, 20);
+	Button btnShowPoint("point", 10, 10, 30, 20);
+	Button btnShowCircle("circle", 50, 10, 30, 20);
 
 	MyPoint p(WIDTH / 2, HEIGHT / 2, true);
 	btnShowPoint.addListener(&p);	//	register this point to first button

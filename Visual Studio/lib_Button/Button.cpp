@@ -1,4 +1,6 @@
 #include <iostream>
+#include <SDL.h>
+
 #include "Button.h"
 #include "../lib_Point/Point.h"
 
@@ -48,19 +50,19 @@ void Button::update(SDL_Event & evt) {
 }
 
 void Button::draw(SDL_Renderer * renderer) {
-	//	draw contour
 	SDL_Rect rect{ this->x, this->y, this->width, this->height };
 
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	int alpha = (this->isPressed ? SDL_ALPHA_OPAQUE - 80 : SDL_ALPHA_OPAQUE);
 
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-
+	//	border
 	SDL_SetRenderDrawColor(renderer, borderColor.r, borderColor.g, borderColor.b, alpha);
-	SDL_RenderFillRect(renderer, &rect);
+	SDL_RenderDrawRect(renderer, &rect);
 
 	rect.x--;
 	rect.y--;
 
+	//	inside
 	SDL_SetRenderDrawColor(renderer, insideColor.r, insideColor.g, insideColor.b, alpha);
 	SDL_RenderFillRect(renderer, &rect);
 }
