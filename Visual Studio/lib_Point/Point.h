@@ -14,7 +14,7 @@ class Vector;
 class Point {
 private:
 	//	drag and drop data
-	static const int NEAR_DISTANCE = 40;
+	static const int NEAR_DISTANCE = 15;
 	bool isMoveable = false;
  	bool isDragMode = false;
 
