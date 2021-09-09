@@ -219,8 +219,8 @@ int main(int argc, char** argv) {
 			points[i].draw(renderer, colors[i], 10);
 		}
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawLine(renderer, points[0].x, points[0].y, points[1].x, points[1].y);	//	vector v1
-		SDL_RenderDrawLine(renderer, points[0].x, points[0].y, points[2].x, points[2].y);	//	vector v2
+		SDL_RenderDrawLine(renderer, (int)points[0].x, (int)points[0].y, (int)points[1].x, (int)points[1].y);	//	vector v1
+		SDL_RenderDrawLine(renderer, (int)points[0].x, (int)points[0].y, (int)points[2].x, (int)points[2].y);	//	vector v2
 
 		//	compute and print angle
 		Vector v1(points[0], points[1]);

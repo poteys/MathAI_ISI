@@ -11,7 +11,7 @@ double Perceptron::getRandomRange(double min, double max) {
 }
 
 Perceptron::Perceptron(int nbInputs) {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	this->nbInputs = nbInputs;
 	this->W = new double[nbInputs];
 	for (int i = 0; i < this->nbInputs; i++) {

@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
 
 		/*	draw any desired graphical objects here	*/
 		circle.setRadius(sliderRadius.getValue());
-		circle.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), sliderNbPoints.getValue());
+		circle.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), (int)(sliderNbPoints.getValue() + 0.5));
 		//circle.drawWithSqrt(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE));
 		circle.drawWithSqrtSmart(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE));
 

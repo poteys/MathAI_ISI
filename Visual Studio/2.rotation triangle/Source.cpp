@@ -67,8 +67,8 @@ void drawTriangle(SDL_Renderer* renderer, Point centre, double alpha) {
 	SDL_Point points_ecran[4];
 	for (int i = 0; i < 3; i++) {
 		angles[i] *= M_PI / 180;
-		points_ecran[i].x = centre.x + cos(angles[i] + alpha) * l;
-		points_ecran[i].y = centre.y - sin(angles[i] + alpha) * l;
+		points_ecran[i].x = (int)(centre.x + cos(angles[i] + alpha) * l + 0.5);
+		points_ecran[i].y = (int)(centre.y - sin(angles[i] + alpha) * l + 0.5);
 	}
 	points_ecran[3] = points_ecran[0];
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);

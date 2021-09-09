@@ -122,18 +122,18 @@ int main(int argc, char** argv) {
 		//	draw X and Y axes
 		Point p = fromPlanToScreen(Point(xMin, 0), xMin, xMax, yMin, yMax, 0, WIDTH - 1, 0, HEIGHT - 1);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawLine(renderer, 0, p.y, WIDTH, p.y);
+		SDL_RenderDrawLine(renderer, 0, (int)p.y, WIDTH, (int)p.y);
 
 		p = fromPlanToScreen(Point(0, yMax), xMin, xMax, yMin, yMax, 0, WIDTH - 1, 0, HEIGHT - 1);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawLine(renderer, p.x, 0, p.x, HEIGHT);
+		SDL_RenderDrawLine(renderer, (int)p.x, 0, (int)p.x, HEIGHT);
 
 		//	draw Perceptron characteristic line
 		vector<Point> linePoints = perceptron.getTwoPointsOfLine(xMin, xMax, yMin, yMax);
 		Point pScreen1 = fromPlanToScreen(linePoints[0], xMin, xMax, yMin, yMax, 0, WIDTH - 1, 0, HEIGHT - 1);
 		Point pScreen2 = fromPlanToScreen(linePoints[1], xMin, xMax, yMin, yMax, 0, WIDTH - 1, 0, HEIGHT - 1);
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawLine(renderer, pScreen1.x, pScreen1.y, pScreen2.x, pScreen2.y);
+		SDL_RenderDrawLine(renderer, (int)pScreen1.x, (int)pScreen1.y, (int)pScreen2.x, (int)pScreen2.y);
 
 		//	draw all candidates
 		Color colorCategory1(255, 255, 0, SDL_ALPHA_OPAQUE);

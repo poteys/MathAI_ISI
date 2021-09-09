@@ -27,7 +27,7 @@ void Circle::draw(SDL_Renderer* renderer, Color color, int nbPoints) {
 void Circle::drawWithSqrt(SDL_Renderer* renderer, Color color) {
 	this->center.draw(renderer, color, 5);
 
-	for (int x = this->center.x - this->radius; x <= this->center.x + this->radius; x++) {
+	for (int x = (int)(this->center.x - this->radius); x <= this->center.x + this->radius; x++) {
 		double y = this->center.y + sqrt(this->radius * this->radius - (x - this->center.x) * (x - this->center.x));
 		Point pBottom(x, y);
 		pBottom.draw(renderer, color, 1);
@@ -43,7 +43,7 @@ void Circle::drawWithSqrtSmart(SDL_Renderer* renderer, Color color) {
 
 	int x = 0, y;
 	do {
-		y = sqrt(this->radius * this->radius - (double)x * x);
+		y = (int)sqrt(this->radius * this->radius - (double)x * x);
 		y = (int)(y + 0.5);
 
 		//	affichage dans le cadran nord-est
