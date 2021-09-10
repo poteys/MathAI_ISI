@@ -12,6 +12,7 @@ constexpr auto WIDTH = 400, HEIGHT = 400;
 
 //	include desired header files for libraries
 #include "../lib_Point/Point.h"
+#include "../lib_Point/Point.h"
 
 SDL_Renderer* init_SDL(const char* title) {
 #pragma region SDL initialization
