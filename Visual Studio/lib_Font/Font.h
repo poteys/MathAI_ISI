@@ -11,8 +11,8 @@ private:
 	string str = "";
 	SDL_Surface * surface = nullptr;
 	SDL_Texture * texture = nullptr;
-	int texW, texH;
-	SDL_Rect dstrect;
+	int texW = 0, texH = 0;
+	SDL_Rect dstrect = { 0, 0, 0, 0 };
 
 public:
 	static TTF_Font * font;
