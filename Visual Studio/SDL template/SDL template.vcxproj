@@ -124,6 +124,9 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\lib_Font\lib_Font.vcxproj">
+      <Project>{a4481cd0-a9e9-4c94-8636-114b15fccb56}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\lib_Point\lib_Point.vcxproj">
       <Project>{950467cb-52eb-404c-a207-2ac54eaee5de}</Project>
     </ProjectReference>
