@@ -13,6 +13,7 @@ constexpr auto WIDTH = 400, HEIGHT = 400;
 //	include desired header files for libraries
 #include "../lib_Point/Point.h"
 #include "../lib_Button/Button.h"
+#include "../lib_Font/Font.h"
 
 SDL_Renderer* init_SDL(const char* title) {
 #pragma region SDL initialization
@@ -95,10 +96,11 @@ public:
 //	entry point of application
 int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
+	Font::init("C:\\Windows\\Fonts\\arial.ttf", 12);
 
 	/*	prepare useful objects here	*/
-	Button btnShowPoint("point", 10, 10, 30, 20);
-	Button btnShowCircle("circle", 50, 10, 30, 20);
+	Button btnShowPoint("point", "show point", 10, 10, 70, 20);
+	Button btnShowCircle("circle", "show circle", 90, 10, 70, 20);
 
 	MyPoint p(WIDTH / 2, HEIGHT / 2, true);
 	btnShowPoint.addListener(&p);	//	register this point to first button
@@ -134,6 +136,7 @@ int main(int argc, char** argv) {
 		endOfGame = keypressed(event, 'q');
 	}
 
+	Font::quit();
 	quit_SDL();
 
 	return 0;

@@ -13,7 +13,7 @@ void Font::quit() {
 	TTF_Quit();
 }
 
-void Font::print(SDL_Renderer * renderer, int x, int y, string str, SDL_Color color) {
+void Font::print(SDL_Renderer * renderer, int x, int y, string str, SDL_Color color, bool center) {
 	if (this->str != str.c_str()) {
 		//	free memory
 		SDL_DestroyTexture(this->texture);
@@ -23,7 +23,13 @@ void Font::print(SDL_Renderer * renderer, int x, int y, string str, SDL_Color co
 		this->texture = SDL_CreateTextureFromSurface(renderer, this->surface);
 
 		SDL_QueryTexture(texture, NULL, NULL, &this->texW, &this->texH);
-		this->dstrect = { x, y, texW, texH };
+		if (!center) {
+
+			this->dstrect = { x, y, texW, texH };
+		}
+		else {
+			this->dstrect = { x - texW / 2, y - texH / 2, texW, texH };
+		}
 	}
 
 	SDL_RenderCopy(renderer, texture, NULL, &dstrect);

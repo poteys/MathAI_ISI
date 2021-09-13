@@ -29,7 +29,7 @@ SDL_Renderer* init_SDL(const char* title) {
 
 	//	create the window and its associated renderer
 	window = SDL_CreateWindow(title, POS_X, POS_Y, WIDTH, HEIGHT, 0);
-	return SDL_CreateRenderer(window, 0, 0 );
+	return SDL_CreateRenderer(window, 0, 0);
 #pragma endregion
 }
 
@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
 
 		/*	draw any desired graphical objects here	*/
 		p.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 5);
-		font.print(renderer, (int)p.x, (int)p.y, "Move me!");
+		font.print(renderer, (int)p.x, (int)p.y, "Move me!", { 255, 255, 255, SDL_ALPHA_OPAQUE }, true);
 
 		//	****************  //
 		//	event management  //

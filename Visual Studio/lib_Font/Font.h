@@ -19,6 +19,6 @@ public:
 	static void init(const char *fontPath = "C:\\Windows\\Fonts\\arial.ttf", int size = 16);
 	static void quit();
 
-	void print(SDL_Renderer *renderer, int x, int y, string str, SDL_Color color = { 255, 255, 255, SDL_ALPHA_OPAQUE });
+	void print(SDL_Renderer *renderer, int x, int y, string str, SDL_Color color = { 255, 255, 255, SDL_ALPHA_OPAQUE }, bool center= true);
 	~Font();
 };

@@ -12,9 +12,10 @@ public:
 
 class Button {
 private:
-	string name;
+	string name, label;
 	int x, y, width, height;
 
+	Color textColor;
 	Color insideColor;
 	Color borderColor;
 
@@ -25,7 +26,8 @@ private:
 	void notifyListeners();
 
 public:
-	Button(string name, int x, int y, int width, int height, Color insideColor = { 0, 255, 0 ,0 }, Color borderColor = { 255, 255, 255, 0 });
+	Button(string name, string label, int x, int y, int width, int height,
+		Color textColor = { 0, 0, 255, SDL_ALPHA_OPAQUE }, Color insideColor = { 0, 255, 0 ,0 }, Color borderColor = { 255, 255, 255, 0 });
 	string getName();
 	void update(SDL_Event &evt);
 	void draw(SDL_Renderer *renderer);

@@ -3,6 +3,7 @@
 
 #include "Button.h"
 #include "../lib_Point/Point.h"
+#include "../lib_Font/Font.h"
 
 bool Button::isMouseInside(int mouseX, int mouseY)
 {
@@ -16,9 +17,10 @@ void Button::notifyListeners() {
 	}
 }
 
-Button::Button(string name, int x, int y, int width, int height, Color insideColor, Color borderColor) :
-	insideColor(insideColor), borderColor(borderColor) {
+Button::Button(string name, string label, int x, int y, int width, int height, Color textColor, Color insideColor, Color borderColor) :
+	textColor(textColor), insideColor(insideColor), borderColor(borderColor) {
 	this->name = name;
+	this->label = label;
 
 	this->x = x;
 	this->y = y;
@@ -65,6 +67,9 @@ void Button::draw(SDL_Renderer * renderer) {
 	//	inside
 	SDL_SetRenderDrawColor(renderer, insideColor.r, insideColor.g, insideColor.b, alpha);
 	SDL_RenderFillRect(renderer, &rect);
+
+	Font font;
+	font.print(renderer, this->x + this->width / 2, this->y + this->height / 2, this->label, { 0, 0, 255, SDL_ALPHA_OPAQUE });
 }
 
 void Button::addListener(IButtonListener * listener) {

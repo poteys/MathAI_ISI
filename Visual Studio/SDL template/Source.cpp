@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
 
 		/*	draw any desired graphical objects here	*/
 		p.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 2);
-		font.print(renderer, p.x, p.y, "This is a really big string!");
+		font.print(renderer, (int)p.x, (int)p.y, "This is a really long string!");
 
 		//	****************  //
 		//	event management  //
