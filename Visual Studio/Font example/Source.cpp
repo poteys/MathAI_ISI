@@ -63,11 +63,12 @@ void quit_SDL() {
 //	entry point of application
 int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
-	Font::init("C:\\Windows\\Fonts\\Verdana.ttf");	//	initialize TTF library
 
 	/*	prepare useful objects here	*/
-	Point p(WIDTH / 2, HEIGHT / 2, true);
-	Font font;
+	Point p1(WIDTH / 2, HEIGHT / 3, true);
+	Point p2(WIDTH / 2, 2*HEIGHT / 3, true);
+	Font font1("C:\\Windows\\Fonts\\Verdana.ttf", 24);
+	Font font2;
 
 	//	*********  //
 	//	main loop  //
@@ -80,8 +81,10 @@ int main(int argc, char** argv) {
 		clearWindow(renderer);
 
 		/*	draw any desired graphical objects here	*/
-		p.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 5);
-		font.print(renderer, (int)p.x, (int)p.y, "Move me!", { 255, 255, 255, SDL_ALPHA_OPAQUE }, true);
+		font1.print(renderer, (int)p1.x, (int)p1.y, "Move me!", { 255, 255, 255, SDL_ALPHA_OPAQUE }, true);
+		p1.draw(renderer, Color(255, 0, 0, SDL_ALPHA_OPAQUE), 8);
+		font2.print(renderer, (int)p2.x, (int)p2.y, "Move me!", { 255, 255, 255, SDL_ALPHA_OPAQUE }, false);
+		p2.draw(renderer, Color(255, 0, 0, SDL_ALPHA_OPAQUE), 8);
 
 		//	****************  //
 		//	event management  //
@@ -89,14 +92,15 @@ int main(int argc, char** argv) {
 		SDL_Event event = getNextEvent();
 
 		/*	give event to objects for update if needed here	*/
-		p.update(event);
+		p1.update(event);
+		p2.update(event);
 
 		showRenderingBuffer(renderer);
 
 		endOfGame = keypressed(event, 'q');
 	}
 
-	Font::quit();
+	//Font::quit();
 	quit_SDL();
 
 	return 0;
