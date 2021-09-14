@@ -63,11 +63,9 @@ void quit_SDL() {
 //	entry point of application
 int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
-	Font::init();
 
 	/*	prepare useful objects here	*/
 	Point p(WIDTH / 2, HEIGHT / 2, true);
-	Font font;
 
 	//	*********  //
 	//	main loop  //
@@ -80,9 +78,7 @@ int main(int argc, char** argv) {
 		clearWindow(renderer);
 
 		/*	draw any desired graphical objects here	*/
-		p.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 2);
-		font.print(renderer, (int)p.x, (int)p.y, "This is a really long string!");
-
+		p.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 10);
 		//	****************  //
 		//	event management  //
 		//	****************  //
