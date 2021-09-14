@@ -96,7 +96,6 @@ public:
 //	entry point of application
 int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
-	Font::init("C:\\Windows\\Fonts\\arial.ttf", 12);
 
 	/*	prepare useful objects here	*/
 	Button btnShowPoint("point", "show point", 10, 10, 70, 20);
@@ -136,7 +135,6 @@ int main(int argc, char** argv) {
 		endOfGame = keypressed(event, 'q');
 	}
 
-	Font::quit();
 	quit_SDL();
 
 	return 0;
