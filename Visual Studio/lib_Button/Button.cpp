@@ -17,8 +17,9 @@ void Button::notifyListeners() {
 	}
 }
 
-Button::Button(string name, string label, int x, int y, int width, int height, Color textColor, Color insideColor, Color borderColor) :
-	textColor(textColor), insideColor(insideColor), borderColor(borderColor) {
+Button::Button(string name, string label, int x, int y, int width, int height, Color textColor, Color insideColor, Color borderColor,
+	const char *fontPath, int size) :
+	textColor(textColor), insideColor(insideColor), borderColor(borderColor), font(fontPath, size) {
 	this->name = name;
 	this->label = label;
 
@@ -68,8 +69,7 @@ void Button::draw(SDL_Renderer * renderer) {
 	SDL_SetRenderDrawColor(renderer, insideColor.r, insideColor.g, insideColor.b, alpha);
 	SDL_RenderFillRect(renderer, &rect);
 
-	Font font;
-	font.print(renderer, this->x + this->width / 2, this->y + this->height / 2, this->label, { 0, 0, 255, SDL_ALPHA_OPAQUE });
+	this->font.print(renderer, this->x + this->width / 2, this->y + this->height / 2, this->label, { 0, 0, 255, SDL_ALPHA_OPAQUE });
 }
 
 void Button::addListener(IButtonListener * listener) {

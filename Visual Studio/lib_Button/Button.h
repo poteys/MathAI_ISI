@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <vector>
 #include "../lib_Point/Point.h"
+#include "../lib_Font/Font.h"
 using namespace std;
 
 class IButtonListener {
@@ -19,6 +20,8 @@ private:
 	Color insideColor;
 	Color borderColor;
 
+	Font font;
+
 	bool isPressed;
 	vector<IButtonListener *> listeners;
 
@@ -27,7 +30,8 @@ private:
 
 public:
 	Button(string name, string label, int x, int y, int width, int height,
-		Color textColor = { 0, 0, 255, SDL_ALPHA_OPAQUE }, Color insideColor = { 0, 255, 0 ,0 }, Color borderColor = { 255, 255, 255, 0 });
+		Color textColor = { 0, 0, 255, SDL_ALPHA_OPAQUE }, Color insideColor = { 0, 255, 0 ,0 }, Color borderColor = { 255, 255, 255, 0 },
+		const char *fontPath = "C:\\Windows\\Fonts\\arial.ttf", int size = 16);
 	string getName();
 	void update(SDL_Event &evt);
 	void draw(SDL_Renderer *renderer);
