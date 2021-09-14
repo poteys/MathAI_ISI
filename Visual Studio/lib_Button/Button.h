@@ -31,7 +31,7 @@ private:
 public:
 	Button(string name, string label, int x, int y, int width, int height,
 		Color textColor = { 0, 0, 255, SDL_ALPHA_OPAQUE }, Color insideColor = { 0, 255, 0 ,0 }, Color borderColor = { 255, 255, 255, 0 },
-		const char *fontPath = "C:\\Windows\\Fonts\\arial.ttf", int size = 16);
+		const char *fontPath = "C:\\Windows\\Fonts\\arial.ttf", int size = 12);
 	string getName();
 	void update(SDL_Event &evt);
 	void draw(SDL_Renderer *renderer);
