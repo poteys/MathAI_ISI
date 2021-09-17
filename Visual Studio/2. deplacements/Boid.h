@@ -29,7 +29,7 @@ public:
 
 public:
 	Boid(Point position, Vector speed);
-	void draw(SDL_Renderer* renderer, Color color, int width, int height);
+	void draw(SDL_Renderer* renderer, Color color, int width, int height, bool showRegions);
 	void update(int width, int height);
 
 	void lerp(Vector A, Vector B, double alpha);

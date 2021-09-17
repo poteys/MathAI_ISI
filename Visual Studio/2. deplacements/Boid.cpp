@@ -20,7 +20,7 @@ Boid::Boid(Point position, Vector speed) :speed(speed), acceleration(0, 0) {
 	this->position = position;
 }
 
-void Boid::draw(SDL_Renderer* renderer, Color color, int width, int height) {
+void Boid::draw(SDL_Renderer* renderer, Color color, int width, int height, bool showRegions) {
 	//	draw droid body
 	this->position.draw(renderer, color, 5);
 
@@ -29,10 +29,12 @@ void Boid::draw(SDL_Renderer* renderer, Color color, int width, int height) {
 	SDL_RenderDrawLine(renderer, (int)this->position.x, (int)this->position.y,
 		(int)(this->position.x + 0.25 * this->speed.x), (int)(this->position.y + 0.25 * this->speed.y));
 
-	//	draw all 3 regions
-	this->position.drawCircle(renderer, (int)this->separationRadius, Color(255, 0, 0, SDL_ALPHA_OPAQUE), true);
-	this->position.drawCircle(renderer, (int)this->alignmentRadius, Color(255, 255, 255, SDL_ALPHA_OPAQUE), false);
-	this->position.drawCircle(renderer, (int)this->cohesionRadius, Color(0, 255, 0, SDL_ALPHA_OPAQUE), true);
+	if (showRegions) {
+		//	draw all 3 regions
+		this->position.drawCircle(renderer, (int)this->separationRadius, Color(255, 0, 0, SDL_ALPHA_OPAQUE), true);
+		this->position.drawCircle(renderer, (int)this->alignmentRadius, Color(255, 255, 255, SDL_ALPHA_OPAQUE), false);
+		this->position.drawCircle(renderer, (int)this->cohesionRadius, Color(0, 255, 0, SDL_ALPHA_OPAQUE), true);
+	}
 }
 
 void Boid::update(int width, int height) {

@@ -49,3 +49,7 @@ void Flock::draw(SDL_Renderer* renderer,
 		this->boids[i]->position.drawCircle(renderer, separationRadius, Color(255, 0, 0, SDL_ALPHA_OPAQUE), true);*/
 	}
 }
+
+void Flock::buttonPushed(void * source) {
+	this->showRegions = !this->showRegions;
+}

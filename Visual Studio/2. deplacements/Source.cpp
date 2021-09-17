@@ -1,10 +1,6 @@
 #include <iostream>
 using namespace std;
 
-#include "../lib_Slider/Slider.h"
-#include "../lib_Point/Point.h"
-#include "Boid.h"
-#include "Flock.h"
 
 #include <SDL.h>
 #include <time.h>
@@ -19,6 +15,12 @@ constexpr auto WIDTH = 800, HEIGHT = 800;
 SDL_Renderer* renderer;
 
 //	include desired header files for libraries
+
+#include "../lib_Slider/Slider.h"
+#include "../lib_Point/Point.h"
+#include "Boid.h"
+#include "Flock.h"
+#include "../lib_Button/Button.h"
 
 SDL_Renderer* init_SDL(const char* title) {
 #pragma region SDL initialization
@@ -126,6 +128,8 @@ void testPartII() {
 	Slider sliderAlignment(200, 20, 150, 0, 2, 0.5);
 	Slider sliderCohesion(380, 20, 150, 0, 2, 0.5);
 	Slider sliderPopulation(20, 40, 150, 0, 100, 0);
+	Button btnShowRegions("show", "show regions", WIDTH - 200, 50, 100, 20);
+	btnShowRegions.addListener(&theFlock);
 
 	//	*********  //
 	//	main loop  //
@@ -157,6 +161,8 @@ void testPartII() {
 		sliderAlignment.draw(renderer, event);
 		sliderCohesion.draw(renderer, event);
 		sliderPopulation.draw(renderer, event);
+		btnShowRegions.draw(renderer);
+		btnShowRegions.update(event);
 
 		showRenderingBuffer(renderer);
 
