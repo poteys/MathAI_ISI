@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 using namespace std;
 
 #include <SDL.h>
@@ -8,10 +9,11 @@ using namespace std;
 //	****************  //
 //	- position and size on screen
 constexpr auto POS_X = 200, POS_Y = 100;
-constexpr auto WIDTH = 400, HEIGHT = 400;
+constexpr auto WIDTH = 600, HEIGHT = 600;
 
 //	include desired header files for libraries
 #include "../lib_Point/Point.h"
+#include "Grid.h"
 
 SDL_Renderer* init_SDL(const char* title) {
 #pragma region SDL initialization
@@ -61,10 +63,14 @@ void quit_SDL() {
 
 //	entry point of application
 int main(int argc, char** argv) {
+	srand((unsigned int)time(nullptr));
+
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
 
 	/*	prepare useful objects here	*/
 	Point p(WIDTH / 2, HEIGHT / 2, true);
+	Grid grid(renderer, SDL_Rect{ 100, 100, 300, 300 }, 10, 10, 50);
+	int n = 1000;
 
 	//	*********  //
 	//	main loop  //
@@ -78,6 +84,13 @@ int main(int argc, char** argv) {
 
 		/*	draw any desired graphical objects here	*/
 		p.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 10);
+		grid.draw();	
+
+		n--;
+		if (n == 0) {
+			n = 1000;
+			grid.createWalls(60);
+		}
 
 		//	****************  //
 		//	event management  //
