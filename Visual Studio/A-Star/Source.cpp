@@ -8,12 +8,14 @@ using namespace std;
 //	window attributs  //
 //	****************  //
 //	- position and size on screen
-constexpr auto POS_X = 200, POS_Y = 100;
-constexpr auto WIDTH = 600, HEIGHT = 600;
+constexpr auto POS_X = 200, POS_Y = 50;
+constexpr auto WIDTH = 1200, HEIGHT = 900;
 
 //	include desired header files for libraries
 #include "../lib_Point/Point.h"
 #include "Grid.h"
+#include "Cell.h"
+#include "AStar.h"
 
 SDL_Renderer* init_SDL(const char* title) {
 #pragma region SDL initialization
@@ -68,9 +70,10 @@ int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
 
 	/*	prepare useful objects here	*/
-	Point p(WIDTH / 2, HEIGHT / 2, true);
-	Grid grid(renderer, SDL_Rect{ 100, 100, 300, 300 }, 10, 10, 50);
-	int n = 1000;
+	Point startPoint(WIDTH / 2, HEIGHT / 2, true);
+	Point endPoint(WIDTH / 2, HEIGHT / 2, true);
+	Grid grid(renderer, SDL_Rect{ 20, 20, 1160, 860 }, 70, 70, 2300);
+	AStar aStar;
 
 	//	*********  //
 	//	main loop  //
@@ -83,14 +86,23 @@ int main(int argc, char** argv) {
 		clearWindow(renderer);
 
 		/*	draw any desired graphical objects here	*/
-		p.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 10);
-		grid.draw();	
+		grid.draw();
 
-		n--;
-		if (n == 0) {
-			n = 1000;
-			grid.createWalls(60);
+		Cell* startCell = grid.getCell(&startPoint);
+		Cell* endCell = grid.getCell(&endPoint);
+		if (startCell != nullptr && !grid.isWall(startCell->getRow(), startCell->getCol()) &&
+			endCell != nullptr && !grid.isWall(endCell->getRow(), endCell->getCol())) {
+			vector<Cell*> path = aStar.shortestPath(&grid, startCell, endCell);
+			/*vector<Cell*> neighbours = grid.getNeighbours(cellOfMouse);
+			if (neighbours.size() != 0) {
+				for (Cell* neighbour : neighbours) {
+					grid.drawCell(neighbour->getRow(), neighbour->getCol(), { 0, 180, 0, SDL_ALPHA_OPAQUE });
+				}
+			}
+			grid.drawCell(cellOfMouse->getRow(), cellOfMouse->getCol(), { 0,255,0,SDL_ALPHA_OPAQUE });*/
 		}
+		startPoint.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 10);
+		endPoint.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 10);
 
 		//	****************  //
 		//	event management  //
@@ -98,7 +110,8 @@ int main(int argc, char** argv) {
 		SDL_Event event = getNextEvent();
 
 		/*	give event to objects for update if needed here	*/
-		p.update(event);
+		startPoint.update(event);
+		endPoint.update(event);
 
 		showRenderingBuffer(renderer);
 
