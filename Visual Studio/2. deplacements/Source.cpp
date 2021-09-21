@@ -103,7 +103,7 @@ void testPartI() {
 		object.followRealistic(target);
 		object.update(WIDTH, HEIGHT);
 
-		object.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), WIDTH, HEIGHT);
+		object.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), WIDTH, HEIGHT, true);
 
 		//	****************  //
 		//	event management  //
