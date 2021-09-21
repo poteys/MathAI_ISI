@@ -4,7 +4,7 @@
 #define max(a, b) ((a)>(b) ? (a) : (b))
 #define min(a, b) ((a)<(b) ? (a) : (b))
 
-Grid::Grid(SDL_Renderer* renderer, SDL_Rect area, int nbRows, int nbColumns, int nbWalls) {
+Grid::Grid(SDL_Renderer* renderer, SDL_Rect area, int nbRows, int nbColumns) {
 	this->renderer = renderer;
 	this->area = area;
 	this->nbRows = nbRows;
@@ -16,21 +16,40 @@ Grid::Grid(SDL_Renderer* renderer, SDL_Rect area, int nbRows, int nbColumns, int
 	this->area.h = this->nbRows * heightCell;
 
 	this->walls = new bool[(long long)this->nbRows * this->nbColumns];
-	this->createWalls(nbWalls);
 }
 
 int Grid::getIdCell(int row, int col) {
 	return row * this->nbColumns + col;
 }
 
-void Grid::createWalls(int nbWalls) {
+int Grid::getIdCell(Cell* cell) {
+	return this->getIdCell(cell->getRow(), cell->getCol());
+}
+
+void Grid::createWalls(double percent) {
 	for (int i = 0; i < this->nbRows * this->nbColumns; i++) {
 		this->walls[i] = false;
 	}
+
+	int nbWalls = this->nbRows * this->nbColumns * percent / 100;
 	for (int i = 0; i < nbWalls; i++) {
-		int row = rand() % this->nbRows;
-		int column = rand() % this->nbColumns;
-		walls[this->getIdCell(row, column)] = true;
+		walls[this->getIdCell(this->getRandomCellNonWall())] = true;
+	}
+}
+
+void Grid::createTreasures(int nbTreasures) {
+	this->treasures.clear();
+
+	for (int i = 0; i < nbTreasures; i++) {
+		Cell* cell = this->getRandomEmptyCell();
+		treasures[this->getIdCell(cell)] = cell;
+	}
+}
+
+void Grid::addTreasures(int nbTreasures) {
+	for (int i = 0; i < nbTreasures; i++) {
+		Cell* cell = this->getRandomEmptyCell();
+		treasures[this->getIdCell(cell)] = cell;
 	}
 }
 
@@ -39,15 +58,21 @@ bool Grid::isWall(int row, int col) {
 }
 
 void Grid::draw() {
+	SDL_Color nonWallColor = { 200, 200, 200, SDL_ALPHA_OPAQUE };
+	SDL_Color wallColor = { 200, 100, 50, SDL_ALPHA_OPAQUE };
+	SDL_Color treasureColor = { 255, 255, 0, SDL_ALPHA_OPAQUE };
+
 	for (int row = 0; row < this->nbRows; row++) {
 		for (int column = 0; column < this->nbColumns; column++) {
-			if (walls[row * this->nbColumns + column]) {
-				this->drawCell(row, column, { 200, 100, 50, SDL_ALPHA_OPAQUE });
-			}
-			else {
-				this->drawCell(row, column, { 200, 200, 200, SDL_ALPHA_OPAQUE });
-			}
+			int idCell = this->getIdCell(row, column);
+			SDL_Color color = walls[idCell] ? wallColor : nonWallColor;
+			this->drawCell(row, column, color);
 		}
+	}
+
+	for (auto pair : treasures) {
+		Cell* cell = pair.second;
+		this->drawCell(cell->getRow(), cell->getCol(), treasureColor);
 	}
 }
 
@@ -69,31 +94,28 @@ void Grid::drawCell(int row, int column, SDL_Color colorInside, SDL_Color border
 }
 
 Cell* Grid::getCell(int row, int column) {
-	Cell* cell = nullptr;
+	int id = this->getIdCell(row, column);
 
-	int id = row * this->nbColumns + column;
-	cell = cells[id];
-	/*auto iter = cells.find(id);*/
-	if (cell == nullptr) {
-		cell = new Cell(row, column);
-		cells[id] = cell;
+	if (this->cells[id] == nullptr) {
+		this->cells[id] = new Cell(row, column);
 	}
 
-	return cell;
+	return this->cells[id];
 }
 
-Cell* Grid::getCell(Point* screenPoint) {
+Cell* Grid::PointToCell(Point* screenPoint) {
 	if (screenPoint->x < this->area.x || screenPoint->x >= (double)this->area.x + this->area.w - 1 ||
 		screenPoint->y < this->area.y || screenPoint->y >= (double)this->area.y + this->area.h - 1) {
 		return nullptr;
 	}
+
 	int column = (int)((screenPoint->x - this->area.x) / (this->area.w / this->nbColumns));
 	int row = (int)((screenPoint->y - this->area.y) / (this->area.h / this->nbRows));
 
 	return getCell(row, column);
 }
 
-Cell * Grid::getRandomCellNonWall() {
+Cell* Grid::getRandomCellNonWall() {
 	int row, column;
 	do {
 		row = rand() % this->nbRows;
@@ -101,6 +123,36 @@ Cell * Grid::getRandomCellNonWall() {
 	} while (walls[this->getIdCell(row, column)]);
 
 	return this->getCell(row, column);
+}
+
+Cell* Grid::getRandomEmptyCell() {
+	Cell* cell;
+	do {
+		cell = this->getRandomCellNonWall();
+	} while (treasures[this->getIdCell(cell)]);
+
+	return cell;
+}
+
+Cell * Grid::getNearestTreasure(Cell* cell, int radius) {
+	Cell* nearestTreasure = nullptr;
+
+	for (auto pair : this->treasures) {
+		Cell* treasure = pair.second;
+		if (nearestTreasure == nullptr ||
+			cell->getDistance(treasure) < cell->getDistance(nearestTreasure)) {
+			nearestTreasure = treasure;
+		}
+	}
+	return (nearestTreasure != nullptr && cell->getDistance(nearestTreasure) <= radius) ? nearestTreasure : nullptr;
+}
+
+int Grid::treasuresLeft() {
+	return this->treasures.size();
+}
+
+void Grid::removeTreasure(Cell * cell) {
+	this->treasures.erase(this->getIdCell(cell));
 }
 
 vector<Cell*> Grid::getNeighbours(Cell* cell) {
