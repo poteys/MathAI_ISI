@@ -41,8 +41,8 @@ void Point::draw(SDL_Renderer* renderer, Color c, int size) const {
 	SDL_Rect rect;
 	rect.w = size;
 	rect.h = size;
-	rect.x = (int)(x - size / 2.0);
-	rect.y = (int)(y - size / 2.0);
+	rect.x = (int)(x - size / 2.0 + 0.5);
+	rect.y = (int)(y - size / 2.0 + 0.5);
 
 	SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
 	SDL_RenderFillRect(renderer, &rect);
