@@ -9,7 +9,7 @@ using namespace std;
 
 class AStar {
 private:
-	static ListNodes closedList;
+	static map<int, Node*> closedList;
 	static ListNodes openList;
 
 	static void freeLists();

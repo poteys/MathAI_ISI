@@ -5,11 +5,17 @@
 #include <vector>
 using namespace std;
 
-ListNodes AStar::closedList;
+//ListNodes AStar::closedList;
+map<int, Node*> AStar::closedList;
 ListNodes AStar::openList;
 
 void AStar::freeLists() {
-	AStar::closedList.free();
+	//AStar::closedList.free();
+	for (auto pair : AStar::closedList) {
+		delete pair.second;
+	}
+	AStar::closedList.clear();
+
 	AStar::openList.free();
 }
 
@@ -23,7 +29,9 @@ ListCells AStar::shortestPath(Grid* grid, Cell* start, Cell* end) {
 		Node* n = openList.findMinF();
 
 		openList.removeNode(n);
-		closedList.addNode(n);
+		//AStar::closedList.addNode(n);
+		AStar::closedList[grid->getIdCell(n->getCell())] = n;
+
 
 		if (n->getCell() == end) {
 			//	create path from end to start, using predecessor information
@@ -39,8 +47,8 @@ ListCells AStar::shortestPath(Grid* grid, Cell* start, Cell* end) {
 			vector<Cell*> neighbours = grid->getNeighbours(n->getCell());
 
 			for (Cell* neighbour : neighbours) {
-				if (closedList.findNode(neighbour) == nullptr) {
-
+				//if (closedList.findNode(neighbour) == nullptr) {
+				if (closedList[grid->getIdCell(neighbour)] == nullptr) {
 					//	neighbour is not in closed list
 					Node* nodeInOpenList = openList.findNode(neighbour);
 					if (nodeInOpenList != nullptr) {
