@@ -24,9 +24,12 @@ public:
 	void createWalls(int nbWalls);
 	bool isWall(int row, int col);
 	void draw();
-	void drawCell(int row, int column, SDL_Color colorInside = { 0, 0, 0, SDL_ALPHA_OPAQUE }, SDL_Color borderColor = { 255, 255, 255, SDL_ALPHA_OPAQUE });
+	void drawCell(int row, int column, SDL_Color colorInside = { 150, 150, 150, SDL_ALPHA_OPAQUE }, SDL_Color borderColor = { 255, 255, 255, SDL_ALPHA_OPAQUE });
 	Cell* getCell(int row, int column);
 	Cell* getCell(Point* screenPoint);
+	Cell* getRandomCellNonWall();
 	vector<Cell* > getNeighbours(Cell* cell);
+	Point cellToPoint(Cell *cell);
+	int getSizeCell();
 };
 

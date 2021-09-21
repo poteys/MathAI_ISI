@@ -42,18 +42,18 @@ void Grid::draw() {
 	for (int row = 0; row < this->nbRows; row++) {
 		for (int column = 0; column < this->nbColumns; column++) {
 			if (walls[row * this->nbColumns + column]) {
-				this->drawCell(row, column, { 255, 0, 0, SDL_ALPHA_OPAQUE });
+				this->drawCell(row, column, { 200, 100, 50, SDL_ALPHA_OPAQUE });
 			}
 			else {
-				this->drawCell(row, column, { 50, 50, 50, SDL_ALPHA_OPAQUE });
+				this->drawCell(row, column, { 200, 200, 200, SDL_ALPHA_OPAQUE });
 			}
 		}
 	}
 }
 
 void Grid::drawCell(int row, int column, SDL_Color colorInside, SDL_Color borderColor) {
-	int widthCell = (int)((double)this->area.w / this->nbColumns + 0.5);
-	int heightCell = (int)((double)this->area.h / this->nbRows + 0.5);
+	int widthCell = (int)((double)this->area.w / this->nbColumns);
+	int heightCell = (int)((double)this->area.h / this->nbRows);
 	int x = this->area.x + column * widthCell;
 	int y = this->area.y + row * heightCell;
 	SDL_Rect rect = { x, y, widthCell + 1, heightCell + 1 };
@@ -93,16 +93,41 @@ Cell* Grid::getCell(Point* screenPoint) {
 	return getCell(row, column);
 }
 
+Cell * Grid::getRandomCellNonWall() {
+	int row, column;
+	do {
+		row = rand() % this->nbRows;
+		column = rand() % this->nbColumns;
+	} while (walls[this->getIdCell(row, column)]);
+
+	return this->getCell(row, column);
+}
+
 vector<Cell*> Grid::getNeighbours(Cell* cell) {
 	vector<Cell*> neighbours;
 
 	for (int row = max(0, cell->getRow() - 1); row <= min(this->nbRows - 1, cell->getRow() + 1); row++) {
 		for (int col = max(0, cell->getCol() - 1); col <= min(this->nbColumns - 1, cell->getCol() + 1); col++) {
-			if ((row != cell->getRow() || col != cell->getCol()) && !walls[this->getIdCell(row, col)]) {
-				neighbours.push_back(this->getCell(row, col));
+			if ((row - cell->getRow()) * (col - cell->getCol()) == 0) {
+				if ((row != cell->getRow() || col != cell->getCol()) && !walls[this->getIdCell(row, col)]) {
+					neighbours.push_back(this->getCell(row, col));
+				}
 			}
 		}
 	}
 
 	return neighbours;
+}
+
+Point Grid::cellToPoint(Cell *cell) {
+	int widthCell = (int)((double)this->area.w / this->nbColumns);
+	int heightCell = (int)((double)this->area.h / this->nbRows);
+
+	return Point(this->area.x + widthCell * cell->getCol() + widthCell / 2, this->area.y + heightCell * cell->getRow() + heightCell / 2);
+}
+
+int Grid::getSizeCell() {
+	int sizeX = this->area.w / this->nbColumns;
+	int sizeY = this->area.h / this->nbRows;
+	return min(sizeX, sizeY);
 }
