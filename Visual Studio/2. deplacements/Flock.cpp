@@ -43,7 +43,7 @@ void Flock::draw(SDL_Renderer* renderer,
 
 	for (int i = 0; i < this->boids.size(); i++) {
 		this->boids[i]->update(width, height);
-		this->boids[i]->draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), width, height);
+		this->boids[i]->draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), width, height, this->showRegions);
 		/*this->boids[i]->position.drawCircle(renderer, cohesionRadius, Color(0, 255, 0, SDL_ALPHA_OPAQUE), true);
 		this->boids[i]->position.drawCircle(renderer, alignmentRadius, Color(150, 150, 150, SDL_ALPHA_OPAQUE), true);
 		this->boids[i]->position.drawCircle(renderer, separationRadius, Color(255, 0, 0, SDL_ALPHA_OPAQUE), true);*/
