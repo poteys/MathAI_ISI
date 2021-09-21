@@ -2,17 +2,18 @@
 #include <vector>
 #include "Cell.h"
 #include "Grid.h"
-#include "List.h"
+#include "ListNodes.h"
+#include "ListCells.h"
 
 using namespace std;
 
 class AStar {
 private:
-	static List closedList;
-	static List openList;
+	static ListNodes closedList;
+	static ListNodes openList;
 
 	static void freeLists();
 public:
-	static vector<Cell*> shortestPath(Grid* grid, Cell* start, Cell* end);
+	static ListCells shortestPath(Grid* grid, Cell* start, Cell* end);
 };
 

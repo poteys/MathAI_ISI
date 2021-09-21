@@ -123,9 +123,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AStar.cpp" />
+    <ClCompile Include="BT.cpp" />
     <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Droid.cpp" />
     <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="List.cpp" />
+    <ClCompile Include="ListNodes.cpp" />
+    <ClCompile Include="ListCells.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
@@ -136,13 +139,22 @@
     <ProjectReference Include="..\lib_Slider\lib_Slider.vcxproj">
       <Project>{d770bbf2-9aa2-4132-b693-72cf5dbb5abf}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\lib_Timer\lib_Timer.vcxproj">
+      <Project>{73652128-f80a-469c-b4dc-de7cefbe2fef}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AStar.h" />
+    <ClInclude Include="BT.h" />
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="Droid.h" />
     <ClInclude Include="Grid.h" />
-    <ClInclude Include="List.h" />
+    <ClInclude Include="IActor.h" />
+    <ClInclude Include="ListCells.h" />
+    <ClInclude Include="ListNodes.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="NodeType.h" />
+    <ClInclude Include="ValueBT.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,14 +8,17 @@ using namespace std;
 //	window attributs  //
 //	****************  //
 //	- position and size on screen
-constexpr auto POS_X = 200, POS_Y = 50;
-constexpr auto WIDTH = 1200, HEIGHT = 900;
+constexpr auto POS_X = 50, POS_Y = 50;
+constexpr auto WIDTH = 1800, HEIGHT = 900;
 
 //	include desired header files for libraries
 #include "../lib_Point/Point.h"
 #include "Grid.h"
 #include "Cell.h"
+#include "ListCells.h"
 #include "AStar.h"
+#include "Droid.h"
+#include "BT.h"
 
 SDL_Renderer* init_SDL(const char* title) {
 #pragma region SDL initialization
@@ -70,10 +73,27 @@ int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
 
 	/*	prepare useful objects here	*/
-	Point startPoint(WIDTH / 2, HEIGHT / 2, true);
-	Point endPoint(WIDTH / 2, HEIGHT / 2, true);
-	Grid grid(renderer, SDL_Rect{ 20, 20, 1160, 860 }, 70, 70, 2300);
+	Point target(WIDTH / 2, HEIGHT / 2, true);
+	int xOffset = 20, yOffset = 20;
+	Grid grid(renderer, SDL_Rect{ xOffset, yOffset, WIDTH - 2 * xOffset, HEIGHT - 2 * yOffset },
+		25, 50, 500);
 	AStar aStar;
+	Droid myDroid(&grid, grid.cellToPoint(grid.getRandomCellNonWall()), 1, 0.1);
+
+	//	Behaviour tree
+	BT* isBusy = new BT(&myDroid, Droid::IS_BUSY);
+	BT* move = new BT(&myDroid, Droid::MOVE);
+	BT* wander = new BT(&myDroid, Droid::WANDER);
+
+	BT* sequence = new BT(NodeType::SEQUENCE);
+	sequence->addChild(isBusy);
+	sequence->addChild(move);
+
+	BT* selector = new BT(NodeType::SELECTOR);
+	selector->addChild(sequence);
+	selector->addChild(wander);
+
+	BT* theBT = selector;
 
 	//	*********  //
 	//	main loop  //
@@ -88,21 +108,31 @@ int main(int argc, char** argv) {
 		/*	draw any desired graphical objects here	*/
 		grid.draw();
 
-		Cell* startCell = grid.getCell(&startPoint);
-		Cell* endCell = grid.getCell(&endPoint);
+		/*Cell* startCell = grid.getCell(&myDroid.getPosition());
+		Cell* endCell = grid.getCell(&target);
 		if (startCell != nullptr && !grid.isWall(startCell->getRow(), startCell->getCol()) &&
 			endCell != nullptr && !grid.isWall(endCell->getRow(), endCell->getCol())) {
-			vector<Cell*> path = aStar.shortestPath(&grid, startCell, endCell);
-			/*vector<Cell*> neighbours = grid.getNeighbours(cellOfMouse);
-			if (neighbours.size() != 0) {
-				for (Cell* neighbour : neighbours) {
-					grid.drawCell(neighbour->getRow(), neighbour->getCol(), { 0, 180, 0, SDL_ALPHA_OPAQUE });
-				}
+			ListCells path = aStar.shortestPath(&grid, startCell, endCell);
+
+			if (!path.isEmpty()) {
+				myDroid.setPath(&path);
 			}
-			grid.drawCell(cellOfMouse->getRow(), cellOfMouse->getCol(), { 0,255,0,SDL_ALPHA_OPAQUE });*/
 		}
-		startPoint.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 10);
-		endPoint.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 10);
+
+		myDroid.move();
+		myDroid.draw(renderer);
+		target.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 8);*/
+
+		//if (myDroid.action(Droid::IS_BUSY) == ValueBT::FAIL) {
+		//	myDroid.action(Droid::WANDER);
+		//}
+		//else {
+		//	myDroid.action(Droid::MOVE);
+		//}
+
+		theBT->eval();
+
+		myDroid.draw(renderer);
 
 		//	****************  //
 		//	event management  //
@@ -110,8 +140,7 @@ int main(int argc, char** argv) {
 		SDL_Event event = getNextEvent();
 
 		/*	give event to objects for update if needed here	*/
-		startPoint.update(event);
-		endPoint.update(event);
+		target.update(event);
 
 		showRenderingBuffer(renderer);
 

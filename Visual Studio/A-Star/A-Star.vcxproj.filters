@@ -13,42 +13,87 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Grid">
+      <UniqueIdentifier>{493c770e-2d97-4d0c-81e6-3074897f0295}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AStar">
+      <UniqueIdentifier>{f075f0ad-0747-46cd-a994-08fce1d8f56f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Grid">
+      <UniqueIdentifier>{84cf91e5-0ac5-4196-a1b1-ca7d7960087b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AStar">
+      <UniqueIdentifier>{3f3e8bbf-54de-460a-b888-50328e3bbc83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Behaviour Tree">
+      <UniqueIdentifier>{7c9639c5-17a1-4447-8993-9cddd4b4bcb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Behaviour Tree">
+      <UniqueIdentifier>{6e32ed02-7c7e-4d36-a27b-67ea6932b95c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Grid.cpp">
+    <ClCompile Include="Droid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Cell.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Grid</Filter>
     </ClCompile>
-    <ClCompile Include="Node.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Source Files\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="ListCells.cpp">
+      <Filter>Source Files\Grid</Filter>
     </ClCompile>
     <ClCompile Include="AStar.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\AStar</Filter>
     </ClCompile>
-    <ClCompile Include="List.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ListNodes.cpp">
+      <Filter>Source Files\AStar</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Source Files\AStar</Filter>
+    </ClCompile>
+    <ClCompile Include="BT.cpp">
+      <Filter>Source Files\Behaviour Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Grid.h">
+    <ClInclude Include="Droid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Cell.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Grid</Filter>
     </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Grid.h">
+      <Filter>Header Files\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="ListCells.h">
+      <Filter>Header Files\Grid</Filter>
     </ClInclude>
     <ClInclude Include="AStar.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\AStar</Filter>
     </ClInclude>
-    <ClInclude Include="List.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ListNodes.h">
+      <Filter>Header Files\AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header Files\AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="BT.h">
+      <Filter>Header Files\Behaviour Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeType.h">
+      <Filter>Header Files\Behaviour Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="ValueBT.h">
+      <Filter>Header Files\Behaviour Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="IActor.h">
+      <Filter>Header Files\Behaviour Tree</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
