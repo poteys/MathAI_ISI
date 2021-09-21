@@ -9,7 +9,8 @@ using namespace std;
 //	****************  //
 //	- position and size on screen
 constexpr auto POS_X = 50, POS_Y = 50;
-constexpr auto WIDTH = 1800, HEIGHT = 900;
+//constexpr auto WIDTH = 1800, HEIGHT = 900;
+constexpr auto WIDTH = 800, HEIGHT = 800;
 
 //	include desired header files for libraries
 #include "../lib_Point/Point.h"
@@ -75,25 +76,28 @@ int main(int argc, char** argv) {
 	/*	prepare useful objects here	*/
 	Point target(WIDTH / 2, HEIGHT / 2, true);
 	int xOffset = 20, yOffset = 20;
-	Grid grid(renderer, SDL_Rect{ xOffset, yOffset, WIDTH - 2 * xOffset, HEIGHT - 2 * yOffset },
-		25, 50, 500);
+	Grid grid(renderer, SDL_Rect{ xOffset, yOffset, WIDTH - 2 * xOffset, HEIGHT - 2 * yOffset }, 30, 30);
+	grid.createWalls(40);		//	percentage of walls
+	grid.createTreasures(10);	//	number of treasures
+
 	AStar aStar;
-	Droid myDroid(&grid, grid.cellToPoint(grid.getRandomCellNonWall()), 1, 0.1);
+	Droid myDroid(&grid, grid.cellToPoint(grid.getRandomCellNonWall()), 15, 0.1);
 
 	//	Behaviour tree
-	BT* isBusy = new BT(&myDroid, Droid::IS_BUSY);
-	BT* move = new BT(&myDroid, Droid::MOVE);
-	BT* wander = new BT(&myDroid, Droid::WANDER);
+	BT* isBusy = new BT("is busy", &myDroid, Droid::IS_BUSY);
+	BT* move = new BT("move", &myDroid, Droid::MOVE);
+	BT* wander = new BT("wander", &myDroid, Droid::WANDER);
 
-	BT* sequence = new BT(NodeType::SEQUENCE);
+	BT* sequence = new BT("wander behaviour", NodeType::SEQUENCE);
 	sequence->addChild(isBusy);
 	sequence->addChild(move);
 
-	BT* selector = new BT(NodeType::SELECTOR);
+	BT* selector = new BT("general behaviour", NodeType::SELECTOR);
 	selector->addChild(sequence);
 	selector->addChild(wander);
 
 	BT* theBT = selector;
+	theBT->print();
 
 	//	*********  //
 	//	main loop  //
@@ -108,29 +112,26 @@ int main(int argc, char** argv) {
 		/*	draw any desired graphical objects here	*/
 		grid.draw();
 
-		/*Cell* startCell = grid.getCell(&myDroid.getPosition());
-		Cell* endCell = grid.getCell(&target);
-		if (startCell != nullptr && !grid.isWall(startCell->getRow(), startCell->getCol()) &&
-			endCell != nullptr && !grid.isWall(endCell->getRow(), endCell->getCol())) {
-			ListCells path = aStar.shortestPath(&grid, startCell, endCell);
-
-			if (!path.isEmpty()) {
-				myDroid.setPath(&path);
+		if (myDroid.action(Droid::TARGET_TREASURE) == ValueBT::SUCCESS) {
+			myDroid.action(Droid::BLINK);
+			if (myDroid.action(Droid::IS_TREASURE_REACHED) == ValueBT::FAIL) {
+				myDroid.action(Droid::MOVE);
+			}
+			else {
+				myDroid.action(Droid::STOP_BLINK);
 			}
 		}
+		else if (myDroid.action(Droid::IS_BUSY) == ValueBT::FAIL) {
+			myDroid.action(Droid::WANDER);
+		}
+		else {
+			myDroid.action(Droid::MOVE);
+		}
 
-		myDroid.move();
-		myDroid.draw(renderer);
-		target.draw(renderer, Color(255, 255, 255, SDL_ALPHA_OPAQUE), 8);*/
-
-		//if (myDroid.action(Droid::IS_BUSY) == ValueBT::FAIL) {
-		//	myDroid.action(Droid::WANDER);
-		//}
-		//else {
-		//	myDroid.action(Droid::MOVE);
-		//}
-
-		theBT->eval();
+		if (grid.treasuresLeft() < 6) {
+			grid.addTreasures(5);
+		}
+		//theBT->eval();
 
 		myDroid.draw(renderer);
 
@@ -141,10 +142,13 @@ int main(int argc, char** argv) {
 
 		/*	give event to objects for update if needed here	*/
 		target.update(event);
+		if (keypressed(event, 'r')) {
+			grid.createWalls(40);		//	percentage of walls
+			grid.createTreasures(10);	//	number of treasures
+		}
+		endOfGame = keypressed(event, 'q');
 
 		showRenderingBuffer(renderer);
-
-		endOfGame = keypressed(event, 'q');
 	}
 
 	quit_SDL();
