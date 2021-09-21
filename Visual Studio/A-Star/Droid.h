@@ -13,7 +13,13 @@ private:
 	Point position;
 
 	ListCells path;
-	
+
+	double radius = 5;	//	10 cells radius for radar
+
+	bool blinking;
+	double radiusMin, radiusMax, currentRadius;
+	double deltaRadius, deltaRadiusMax = 0.3;
+
 	//	Lerp management
 	Point p1, p2;
 	bool isRunningLerp;
@@ -21,11 +27,13 @@ private:
 
 	Timer timerToMove;
 
+	Cell* getCurrentCell();
+
 public:
-	static int MOVE, IS_BUSY, WANDER;
+	static const int MOVE, IS_BUSY, WANDER, TARGET_TREASURE, IS_TREASURE_REACHED, BLINK, STOP_BLINK;
 
 	Droid(Grid* grid, Point position, int delay = 20, double deltaAlphaLerp = 0.1);
-	bool isBusy();
+	bool hasPathToGo();
 	Point getPosition();
 	void setPosition(Point position);
 	void setPath(ListCells *path);
@@ -33,9 +41,18 @@ public:
 	void move();
 	void draw(SDL_Renderer *renderer);
 
+	bool setTarget(Cell* target);
 	void drawTarget();
 
 	//	actions
 	ValueBT action(int idAction);
+
+	ValueBT moveAction();
+	ValueBT isBusyAction();
+	ValueBT wanderAction();
+	ValueBT targetTreasureAction();
+	ValueBT isTreasureReachedAction();
+	ValueBT blinkAction();
+	ValueBT stopBlinkAction();
 };
 
