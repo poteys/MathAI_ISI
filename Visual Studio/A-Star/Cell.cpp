@@ -4,7 +4,6 @@
 Cell::Cell(int row, int column) {
 	this->row = row;
 	this->column = column;
-
 }
 
 int Cell::getRow() {
@@ -16,7 +15,7 @@ int Cell::getCol() {
 }
 
 double Cell::getDistance(Cell* cell) {
-	double dRow = (double)this->row - cell->row;
-	double dColumn = (double)this->column - cell->column;
+	int dRow = this->row - cell->row;
+	int dColumn = this->column - cell->column;
 	return sqrt(dRow * dRow + dColumn * dColumn);
 }

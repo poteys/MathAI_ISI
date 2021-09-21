@@ -5,7 +5,7 @@ void ListCells::addCell(Cell* cell) {
 }
 
 int ListCells::getLength() {
-	return (unsigned long long)this->cells.size();
+	return (int)this->cells.size();
 }
 
 bool ListCells::isEmpty() {
