@@ -22,13 +22,7 @@ Grid::Grid(SDL_Renderer* renderer, SDL_Rect area, int nbRows, int nbColumns) {
 	this->walls = new bool[(long long)this->nbRows * this->nbColumns];
 	this->eraseWalls();
 
-	//	create all cells now
-	int i = 0;
-	for (int row = 0; row < this->nbRows; row++) {
-		for (int col = 0; col < this->nbColumns; col++) {
-			this->allCells[i++] = new Cell(row, col);
-		}
-	}
+	this->createAllCells();
 }
 
 int Grid::getNbRows() const {
@@ -40,6 +34,15 @@ int Grid::getNbColumns() const {
 }
 
 //	managing cells
+void Grid::createAllCells() {
+	int i = 0;
+	for (int row = 0; row < this->nbRows; row++) {
+		for (int col = 0; col < this->nbColumns; col++) {
+			this->allCells[i++] = new Cell(row, col);
+		}
+	}
+}
+
 int Grid::getIdCell(int row, int col) const {
 	return row * this->nbColumns + col;
 }
@@ -50,11 +53,6 @@ int Grid::getIdCell(Cell* cell) const {
 
 Cell* Grid::getCell(int row, int column) {
 	int id = this->getIdCell(row, column);
-
-	/*if (this->cells.count(id) == 0) {
-		this->cells[id] = new Cell(row, column);
-	}*/
-
 	return this->allCells[id];
 }
 
@@ -95,10 +93,6 @@ Cell* Grid::getRandomEmptyCell() {
 	do {
 		cell = this->getRandomCellNonWall();
 	} while (treasures.count(this->getIdCell(cell)) == 1);
-	//} while (treasures[this->getIdCell(cell)]);
-
-	int row = cell->getRow();
-	int col = cell->getCol();
 
 	return cell;
 }
@@ -180,6 +174,11 @@ int Grid::treasuresLeft() const {
 
 //	drawing
 void Grid::draw() {
+	this->drawCells();
+	this->drawTreasures();
+}
+
+void Grid::drawCells() {
 	int idCell = 0;
 	for (int row = 0; row < this->nbRows; row++) {
 		for (int column = 0; column < this->nbColumns; column++) {
@@ -187,14 +186,6 @@ void Grid::draw() {
 			this->drawCell(this->allCells[idCell], color);
 			idCell++;
 		}
-	}
-	this->drawTreasures();
-}
-
-void Grid::drawTreasures() const {
-	for (auto pair : treasures) {
-		Cell* cell = pair.second;
-		this->drawCell(cell, treasureColor);
 	}
 }
 
@@ -214,3 +205,11 @@ void Grid::drawCell(Cell* cell, SDL_Color colorInside, SDL_Color borderColor) co
 	SDL_SetRenderDrawColor(this->renderer, colorInside.r, colorInside.g, colorInside.b, colorInside.a);
 	SDL_RenderFillRect(this->renderer, &rect);
 }
+
+void Grid::drawTreasures() const {
+	for (auto pair : treasures) {
+		Cell* cell = pair.second;
+		this->drawCell(cell, treasureColor);
+	}
+}
+

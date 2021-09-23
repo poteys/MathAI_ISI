@@ -30,6 +30,7 @@ public:
 	int getNbColumns() const;
 
 	//	managing cells
+	void createAllCells();
 	int getIdCell(int row, int col) const;
 	int getIdCell(Cell* cell) const;
 	Cell* getCell(int row, int column);
@@ -45,17 +46,18 @@ public:
 	void eraseWalls();
 	void createWalls(double percent);
 	bool isWall(int row, int col) const;
-	
+
 	//	managing treasures
 	void createTreasures(int nbTreasures);
 	void addTreasures(int nbTreasures);
 	void removeTreasure(Cell* cell);
 	Cell* getNearestTreasure(Cell* cell, int radius) const;
 	int treasuresLeft() const;
-	
+
 	//	drawing
 	void draw();
-	void drawTreasures() const;
+	void drawCells();
 	void drawCell(Cell* cell, SDL_Color colorInside = { 150, 150, 150, SDL_ALPHA_OPAQUE }, SDL_Color borderColor = { 255, 255, 255, SDL_ALPHA_OPAQUE }) const;
+	void drawTreasures() const;
 };
 
