@@ -16,7 +16,7 @@ int Cell::getCol() const {
 	return this->column;
 }
 
-double Cell::getDistance(Cell* cell) {
+double Cell::getDistance(Cell* cell) const {
 	int dRow = this->row - cell->row;
 	int dColumn = this->column - cell->column;
 
