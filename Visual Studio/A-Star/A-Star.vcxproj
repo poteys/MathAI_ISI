@@ -127,7 +127,6 @@
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Droid.cpp" />
     <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="ListNodes.cpp" />
     <ClCompile Include="ListCells.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -151,7 +150,6 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="IActor.h" />
     <ClInclude Include="ListCells.h" />
-    <ClInclude Include="ListNodes.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="NodeType.h" />
     <ClInclude Include="ValueBT.h" />

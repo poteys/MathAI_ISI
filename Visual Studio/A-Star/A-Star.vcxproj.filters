@@ -51,9 +51,6 @@
     <ClCompile Include="AStar.cpp">
       <Filter>Source Files\AStar</Filter>
     </ClCompile>
-    <ClCompile Include="ListNodes.cpp">
-      <Filter>Source Files\AStar</Filter>
-    </ClCompile>
     <ClCompile Include="Node.cpp">
       <Filter>Source Files\AStar</Filter>
     </ClCompile>
@@ -75,9 +72,6 @@
       <Filter>Header Files\Grid</Filter>
     </ClInclude>
     <ClInclude Include="AStar.h">
-      <Filter>Header Files\AStar</Filter>
-    </ClInclude>
-    <ClInclude Include="ListNodes.h">
       <Filter>Header Files\AStar</Filter>
     </ClInclude>
     <ClInclude Include="Node.h">

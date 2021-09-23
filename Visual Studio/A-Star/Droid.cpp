@@ -16,7 +16,7 @@ Cell * Droid::getCurrentCell() {
 }
 
 Droid::Droid(Grid* grid, Point position, int delay, double deltaAlphaLerp)
-	:timerToMove(delay) {
+	:timerToMove(delay), myAstar(grid) {
 	this->grid = grid;
 	this->position = position;
 
@@ -51,30 +51,31 @@ void Droid::setPath(ListCells* path) {
 void Droid::lerp() {
 	Vector v1(this->p1.x, this->p1.y);
 	Vector v2(this->p2.x, this->p2.y);
+
 	this->position = (1 - this->alphaLerp) * v1 + this->alphaLerp * v2;
+
+	this->alphaLerp += this->deltaAlphaLerp;
+
+	if (this->alphaLerp >= 1) {
+		this->isRunningLerp = false;
+		this->p1 = this->p2;
+	}
 }
 
 void Droid::move() {
 	if (this->timerToMove.isReady()) {
 		if (this->isRunningLerp) {
 			this->lerp();
-			this->alphaLerp += this->deltaAlphaLerp;
-			if (this->alphaLerp >= 1) {
-				this->isRunningLerp = false;
-				this->p1 = this->p2;
-			}
 		}
 		else if (!this->path.isEmpty()) {
 			this->p2 = this->grid->cellToPoint(this->path.getNextCell());
 			this->isRunningLerp = true;
 			this->alphaLerp = this->deltaAlphaLerp;
-
 		}
 	}
 }
 
-void Droid::draw(SDL_Renderer* renderer) {
-	//	manage blinking
+void Droid::manageBlinking() {
 	if (this->blinking) {
 		this->currentRadius += this->deltaRadius;
 		if (this->currentRadius < this->radiusMin) {
@@ -86,18 +87,22 @@ void Droid::draw(SDL_Renderer* renderer) {
 			this->deltaRadius = -this->deltaRadiusMax;
 		}
 	}
+}
 
-	this->position.draw(renderer, { 0, 0, 255, SDL_ALPHA_OPAQUE }, this->currentRadius);
+void Droid::draw(SDL_Renderer* renderer) {
+	manageBlinking();
+
+	this->position.draw(renderer, { 0, 0, 255, SDL_ALPHA_OPAQUE }, (int)this->currentRadius);
 	this->drawTarget();
 
-	this->position.drawCircle(renderer, this->radius*this->grid->getSizeCell(), { 255, 255, 255, SDL_ALPHA_OPAQUE }, true);
+	this->position.drawCircle(renderer, (int)this->radius*this->grid->getSizeCell(), { 255, 255, 255, SDL_ALPHA_OPAQUE }, true);
 }
 
 bool Droid::setTarget(Cell * target) {
 	bool value = false;
 
 	Cell* current = this->getCurrentCell();
-	ListCells path = AStar::shortestPath(this->grid, current, target);
+	ListCells path = myAstar.shortestPath(current, target);
 	if (!path.isEmpty()) {
 		path.getNextCell();
 		this->setPath(&path);
@@ -109,7 +114,7 @@ bool Droid::setTarget(Cell * target) {
 void Droid::drawTarget() {
 	if (!this->path.isEmpty()) {
 		Cell* target = this->path.getCellAt(0);
-		grid->drawCell(target->getRow(), target->getCol(), { 0, 200, 50, SDL_ALPHA_OPAQUE });
+		grid->drawCell(target, { 0, 200, 50, SDL_ALPHA_OPAQUE });
 	}
 }
 
@@ -137,7 +142,8 @@ ValueBT Droid::moveAction() {
 }
 
 ValueBT Droid::isBusyAction() {
-	return !this->hasPathToGo() && !this->isRunningLerp ? ValueBT::FAIL : ValueBT::SUCCESS;
+	//return this->hasPathToGo() || this->isRunningLerp ? ValueBT::SUCCESS : ValueBT::FAIL;
+	return this->hasPathToGo() ? ValueBT::SUCCESS : ValueBT::FAIL;
 }
 
 ValueBT Droid::wanderAction() {
@@ -149,7 +155,7 @@ ValueBT Droid::wanderAction() {
 ValueBT Droid::targetTreasureAction() {
 	ValueBT value = ValueBT::FAIL;
 
-	Cell* treasure = this->grid->getNearestTreasure(this->getCurrentCell(), this->radius);
+	Cell* treasure = this->grid->getNearestTreasure(this->getCurrentCell(), (int)this->radius);
 	if (treasure != nullptr) {
 		if (this->setTarget(treasure)) {
 			value = ValueBT::SUCCESS;
@@ -167,7 +173,7 @@ ValueBT Droid::isTreasureReachedAction() {
 	ValueBT value = ValueBT::FAIL;
 
 	Cell* current = this->getCurrentCell();
-	Cell* treasure = this->grid->getNearestTreasure(current, this->radius);
+	Cell* treasure = this->grid->getNearestTreasure(current, (int)this->radius);
 	if (treasure != nullptr && treasure == current) {
 		this->grid->removeTreasure(treasure);
 		value = ValueBT::SUCCESS;

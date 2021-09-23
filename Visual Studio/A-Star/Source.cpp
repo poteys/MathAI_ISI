@@ -77,10 +77,11 @@ int main(int argc, char** argv) {
 	Point target(WIDTH / 2, HEIGHT / 2, true);
 	int xOffset = 20, yOffset = 20;
 	Grid grid(renderer, SDL_Rect{ xOffset, yOffset, WIDTH - 2 * xOffset, HEIGHT - 2 * yOffset }, 30, 30);
-	grid.createWalls(40);		//	percentage of walls
+	double precentOfWalls = 30.0;
+	grid.createWalls(precentOfWalls);		//	percentage of walls
 	grid.createTreasures(10);	//	number of treasures
+	Timer timerSpawnTreasure(1000);
 
-	AStar aStar;
 	Droid myDroid(&grid, grid.cellToPoint(grid.getRandomCellNonWall()), 15, 0.1);
 
 	//	Behaviour tree
@@ -128,8 +129,9 @@ int main(int argc, char** argv) {
 			myDroid.action(Droid::MOVE);
 		}
 
-		if (grid.treasuresLeft() < 6) {
-			grid.addTreasures(5);
+		//if (grid.treasuresLeft() < 10) {
+		if (timerSpawnTreasure.isReady()) {
+			grid.addTreasures(1);
 		}
 		//theBT->eval();
 
@@ -143,7 +145,7 @@ int main(int argc, char** argv) {
 		/*	give event to objects for update if needed here	*/
 		target.update(event);
 		if (keypressed(event, 'r')) {
-			grid.createWalls(40);		//	percentage of walls
+			grid.createWalls(precentOfWalls);		//	percentage of walls
 			grid.createTreasures(10);	//	number of treasures
 		}
 		endOfGame = keypressed(event, 'q');

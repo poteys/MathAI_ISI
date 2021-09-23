@@ -9,7 +9,8 @@ private:
 	Node* predecessor;
 
 public:
-	Node(Cell* cell, Node* pred, Cell* end);
+	//Node(Cell* cell, Node* pred, Cell* end);
+	Node(Cell* cell);
 
 	double getG();
 	double getH();

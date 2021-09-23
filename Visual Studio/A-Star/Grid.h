@@ -9,34 +9,53 @@ using namespace std;
 
 class Grid {
 private:
+	static const SDL_Color nonWallColor;
+	static const SDL_Color wallColor;
+	static const SDL_Color treasureColor;
+
 	SDL_Renderer* renderer;
 	SDL_Rect area;
 	int nbRows, nbColumns;
 
+	int widthCell, heightCell;
+
 	bool* walls;
 	map<int, Cell*> treasures;
-	map<int, Cell*> cells;
+	map<int, Cell*> allCells;
 
 public:
 	Grid(SDL_Renderer* renderer, SDL_Rect area, int nbRows, int nbColumns);
 
-	int getIdCell(int row, int col);
-	int getIdCell(Cell* cell);
-	void createWalls(double percent);
-	void createTreasures(int nbTreasures);
-	void addTreasures(int nbTreasures);
-	bool isWall(int row, int col);
-	void draw();
-	void drawCell(int row, int column, SDL_Color colorInside = { 150, 150, 150, SDL_ALPHA_OPAQUE }, SDL_Color borderColor = { 255, 255, 255, SDL_ALPHA_OPAQUE });
+	int getNbRows() const;
+	int getNbColumns() const;
+
+	//	managing cells
+	int getIdCell(int row, int col) const;
+	int getIdCell(Cell* cell) const;
 	Cell* getCell(int row, int column);
+	bool isPointInGrid(Point* screenPoint) const;
 	Cell* PointToCell(Point* screenPoint);
-	Point cellToPoint(Cell *cell);
+	Point cellToPoint(Cell *cell) const;
 	Cell* getRandomCellNonWall();
 	Cell* getRandomEmptyCell();
-	Cell* getNearestTreasure(Cell* cell, int radius);
-	int treasuresLeft();
-	void removeTreasure(Cell* cell);
 	vector<Cell* > getNeighbours(Cell* cell);
-	int getSizeCell();
+	int getSizeCell() const;
+
+	//	managing walls
+	void eraseWalls();
+	void createWalls(double percent);
+	bool isWall(int row, int col) const;
+	
+	//	managing treasures
+	void createTreasures(int nbTreasures);
+	void addTreasures(int nbTreasures);
+	void removeTreasure(Cell* cell);
+	Cell* getNearestTreasure(Cell* cell, int radius) const;
+	int treasuresLeft() const;
+	
+	//	drawing
+	void draw();
+	void drawTreasures() const;
+	void drawCell(Cell* cell, SDL_Color colorInside = { 150, 150, 150, SDL_ALPHA_OPAQUE }, SDL_Color borderColor = { 255, 255, 255, SDL_ALPHA_OPAQUE }) const;
 };
 

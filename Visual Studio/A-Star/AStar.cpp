@@ -1,74 +1,111 @@
 #include "AStar.h"
-#include "ListNodes.h"
 #include "ListCells.h"
 #include "Node.h"
 #include <vector>
 using namespace std;
 
-//ListNodes AStar::closedList;
-map<int, Node*> AStar::closedList;
-ListNodes AStar::openList;
 
 void AStar::freeLists() {
-	//AStar::closedList.free();
-	for (auto pair : AStar::closedList) {
-		delete pair.second;
-	}
-	AStar::closedList.clear();
-
-	AStar::openList.free();
+	this->openList.clear();
+	this->closedList.clear();
 }
 
-ListCells AStar::shortestPath(Grid* grid, Cell* start, Cell* end) {
+Node* AStar::findBestInOpenList() {
+	Node* bestNode = nullptr;
+	for (auto pair : this->openList) {
+		if (bestNode == nullptr || pair.second->getF() < bestNode->getF()) {
+			bestNode = pair.second;
+		}
+	}
+	return bestNode;
+}
+
+ListCells AStar::generateFinalPath(Node* n) {
+	ListCells path;
+
+	//	create path from end to start, using predecessor information
+	while (n->getPredecessor() != nullptr) {
+		path.addCell(n->getCell());
+		n = n->getPredecessor();
+	}
+	path.addCell(n->getCell());
+
+	return path;
+}
+
+void AStar::updateNode(Node *nodeToUpdate, Node* otherPredecessor, Cell* end) {
+	double newG = otherPredecessor->getG() + otherPredecessor->getCell()->getDistance(nodeToUpdate->getCell());
+	if (newG < nodeToUpdate->getG()) {
+		nodeToUpdate->setG(newG);
+		nodeToUpdate->setPredecessor(otherPredecessor);
+	}
+}
+
+Node* AStar::getNodeFromPool(Cell* cell, Node* pred, Cell* end) {
+	Node* node = this->allNodes[cell];
+
+	node->setPredecessor(pred);
+	if (pred != nullptr) {
+		node->setG(pred->getG() + pred->getCell()->getDistance(cell));
+	}
+	else {
+		node->setG(0);
+	}
+	node->setH(cell->getDistance(end));
+
+	return node;
+}
+
+AStar::AStar(Grid * grid) {
+	this->grid = grid;
+
+	//	create all nodes now
+	for (int row = 0; row < grid->getNbRows(); row++) {
+		for (int col = 0; col < grid->getNbColumns(); col++) {
+			Cell* cell = grid->getCell(row, col);
+			this->allNodes[cell] = new Node(cell);
+		}
+	}
+}
+
+ListCells AStar::shortestPath(Cell* start, Cell* end) {
 	ListCells path;
 	bool targetReached = false;
 
-	openList.addNode(new Node(start, nullptr, end));
+	Node* node = this->getNodeFromPool(start, nullptr, end);
+	this->openList[start] = node;
 
-	while (!openList.isEmpty() && !targetReached) {
-		Node* n = openList.findMinF();
+	while (!this->openList.empty() && !targetReached) {
+		Node* n = this->findBestInOpenList();
 
-		openList.removeNode(n);
-		//AStar::closedList.addNode(n);
-		AStar::closedList[grid->getIdCell(n->getCell())] = n;
+		this->openList.erase(n->getCell());
 
+		this->closedList[n->getCell()] = n;
 
 		if (n->getCell() == end) {
-			//	create path from end to start, using predecessor information
-			while (n->getPredecessor() != nullptr) {
-				path.addCell(n->getCell());
-				n = n->getPredecessor();
-			}
-			path.addCell(n->getCell());
-
+			path = this->generateFinalPath(n);
 			targetReached = true;
 		}
 		else {
 			vector<Cell*> neighbours = grid->getNeighbours(n->getCell());
 
 			for (Cell* neighbour : neighbours) {
-				//if (closedList.findNode(neighbour) == nullptr) {
-				if (closedList[grid->getIdCell(neighbour)] == nullptr) {
+				if (this->closedList.count(neighbour) == 0) {
 					//	neighbour is not in closed list
-					Node* nodeInOpenList = openList.findNode(neighbour);
-					if (nodeInOpenList != nullptr) {
-						double newG = n->getG() + n->getCell()->getDistance(neighbour);
-						//	neighbour is already in open list
-						if (nodeInOpenList->getG() > newG) {
-							nodeInOpenList->setG(newG);
-							nodeInOpenList->setPredecessor(n);
-						}
+					if (this->openList.count(neighbour) == 1) {
+						Node* nodeInOpenList = this->openList[neighbour];
+						this->updateNode(nodeInOpenList, n, end);
 					}
 					else {
 						//	neighbour is not in open list
-						Node* neighbourNode = new Node(neighbour, n, end);
-						openList.addNode(neighbourNode);
+						Node* neighbourNode = this->getNodeFromPool(neighbour, n, end);
+						this->openList[neighbour] = neighbourNode;
 					}
 				}
 			}
 		}
 	}
 
-	AStar::freeLists();
-	return path;		//	no path from start to end
+	this->freeLists();
+	return path;
 }

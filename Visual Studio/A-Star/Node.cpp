@@ -1,16 +1,8 @@
 #include "Node.h"
 #include "Cell.h"
 
-Node::Node(Cell* cell, Node* pred, Cell* end) {
+Node::Node(Cell* cell) {
 	this->cell = cell;
-	this->predecessor = pred;
-	if (this->predecessor != nullptr) {
-		this->g = pred->g + pred->cell->getDistance(cell);
-	}
-	else {
-		this->g = 0;
-	}
-	this->h = cell->getDistance(end);
 }
 
 double Node::getG() {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../lib_Point/Point.h"
+#include "AStar.h"
 #include "ListCells.h"
 #include "Grid.h"
 #include "IActor.h"
@@ -9,6 +10,7 @@
 
 class Droid : public IActor {
 private:
+	AStar myAstar;
 	Grid *grid;
 	Point position;
 
@@ -39,6 +41,7 @@ public:
 	void setPath(ListCells *path);
 	void lerp();
 	void move();
+	void manageBlinking();
 	void draw(SDL_Renderer *renderer);
 
 	bool setTarget(Cell* target);

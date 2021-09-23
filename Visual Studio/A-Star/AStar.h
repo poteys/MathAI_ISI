@@ -2,18 +2,26 @@
 #include <vector>
 #include "Cell.h"
 #include "Grid.h"
-#include "ListNodes.h"
 #include "ListCells.h"
+#include "Node.h"
 
 using namespace std;
 
 class AStar {
 private:
-	static map<int, Node*> closedList;
-	static ListNodes openList;
+	Grid* grid;
+	map<Cell*, Node*> allNodes;		//	remplace int by Cell*
+	map<Cell*, Node*> closedList;
+	map<Cell*, Node*> openList;
 
-	static void freeLists();
+	void freeLists();
+	Node* findBestInOpenList();
+	ListCells generateFinalPath(Node* n);
+	void updateNode(Node *nodeToUpdate, Node* predecessor, Cell* end);
+	Node* getNodeFromPool(Cell* start, Node* pred, Cell* end);
+
 public:
-	static ListCells shortestPath(Grid* grid, Cell* start, Cell* end);
+	AStar(Grid *grid);
+	ListCells shortestPath(Cell* start, Cell* end);
 };
 
