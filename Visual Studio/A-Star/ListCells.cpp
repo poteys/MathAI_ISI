@@ -16,12 +16,14 @@ Cell * ListCells::getCellAt(int index) const {
 	return this->cells[index];
 }
 
-Cell* ListCells::getNextCell() {
-	if (this->cells.size() == 0) {
-		return nullptr;
+Cell* ListCells::getAndRemoveNextCell() {
+	Cell* cell = nullptr;
+
+	if (this->cells.size() != 0) {
+		cell = this->cells[this->cells.size() - 1];
+		this->cells.pop_back();
 	}
-	Cell* cell = this->cells[this->cells.size() - 1];
-	this->cells.pop_back();
+
 	return cell;
 }
 

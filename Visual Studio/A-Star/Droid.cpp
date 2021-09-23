@@ -68,7 +68,7 @@ void Droid::move() {
 			this->lerp();
 		}
 		else if (!this->path.isEmpty()) {
-			this->p2 = this->grid->cellToPoint(this->path.getNextCell());
+			this->p2 = this->grid->cellToPoint(this->path.getAndRemoveNextCell());
 			this->isRunningLerp = true;
 			this->alphaLerp = this->deltaAlphaLerp;
 		}
@@ -104,7 +104,7 @@ bool Droid::setTarget(Cell * target) {
 	Cell* current = this->getCurrentCell();
 	ListCells path = myAstar.shortestPath(current, target);
 	if (!path.isEmpty()) {
-		path.getNextCell();
+		path.getAndRemoveNextCell();
 		this->setPath(&path);
 		value = true;
 	}

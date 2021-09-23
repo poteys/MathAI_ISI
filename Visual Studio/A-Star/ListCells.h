@@ -12,7 +12,7 @@ public:
 	int getLength() const;
 	bool isEmpty() const;
 	Cell* getCellAt(int index) const;
-	Cell* getNextCell();
+	Cell* getAndRemoveNextCell();
 	void clear();
 };
 
