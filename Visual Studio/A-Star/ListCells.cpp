@@ -4,15 +4,15 @@ void ListCells::addCell(Cell* cell) {
 	this->cells.push_back(cell);
 }
 
-int ListCells::getLength() {
+int ListCells::getLength() const {
 	return (int)this->cells.size();
 }
 
-bool ListCells::isEmpty() {
+bool ListCells::isEmpty() const {
 	return this->cells.size() == 0;
 }
 
-Cell * ListCells::getCellAt(int index) {
+Cell * ListCells::getCellAt(int index) const {
 	return this->cells[index];
 }
 

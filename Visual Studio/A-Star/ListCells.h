@@ -9,9 +9,9 @@ private:
 	vector<Cell*> cells;
 public:
 	void addCell(Cell* cell);
-	int getLength();
-	bool isEmpty();
-	Cell* getCellAt(int index);
+	int getLength() const;
+	bool isEmpty() const;
+	Cell* getCellAt(int index) const;
 	Cell* getNextCell();
 	void clear();
 };
