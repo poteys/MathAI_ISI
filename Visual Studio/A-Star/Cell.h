@@ -5,9 +5,9 @@ private:
 public:
 	Cell(int row, int column);
 
-	int getRow();
-	int getCol();
+	int getRow() const;
+	int getCol() const;
 
-	double getDistance(Cell* cell);
+	double getDistance(Cell* cell) const;
 };
 
