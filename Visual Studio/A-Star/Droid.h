@@ -7,6 +7,7 @@
 #include "IActor.h"
 #include "ValueBT.h"
 #include "../lib_Timer/Timer.h"
+#include "BT.h"
 
 class Droid : public IActor {
 private:
@@ -31,6 +32,8 @@ private:
 
 	Cell* getCurrentCell();
 
+	BT* behaviourTree;
+
 public:
 	static const int MOVE, IS_BUSY, WANDER, TARGET_TREASURE, IS_TREASURE_REACHED, BLINK, STOP_BLINK;
 
@@ -41,11 +44,14 @@ public:
 	void setPath(Path *path);
 	void lerp();
 	void move();
+	void behave();
 	void manageBlinking();
 	void draw(SDL_Renderer *renderer);
 
 	bool setTarget(Cell* target);
 	void drawTarget();
+
+	void getBehaviourTree();
 
 	//	actions
 	ValueBT action(int idAction);

@@ -2,6 +2,7 @@
 #include "Grid.h"
 #include <time.h>
 #include "AStar.h"
+#include "BT.h"
 
 const int Droid::MOVE = 0;
 const int Droid::IS_BUSY = 1;
@@ -75,6 +76,10 @@ void Droid::move() {
 	}
 }
 
+void Droid::behave() {
+	this->behaviourTree->eval();
+}
+
 void Droid::manageBlinking() {
 	if (this->blinking) {
 		this->currentRadius += this->deltaRadius;
@@ -118,6 +123,36 @@ void Droid::drawTarget() {
 	}
 }
 
+void Droid::getBehaviourTree() {
+	BT* isBusyAction = new BT("isBusy", this, Droid::IS_BUSY);
+	BT* moveAction = new BT("move", this, Droid::MOVE);
+	BT* targetRandomAction = new BT("targetRandom", this, Droid::WANDER);
+	BT* targetTreasureAction = new BT("targetTreasure", this, Droid::TARGET_TREASURE);
+	BT* isTreasureReachedAction = new BT("isTreasureReached", this, Droid::IS_TREASURE_REACHED);
+	BT* blinkAction = new BT("blink", this, Droid::BLINK);
+	BT* stopBlinkAction = new BT("stropBlink", this, Droid::STOP_BLINK);
+
+	BT* lookForTreasure = new BT("look for treasure", NodeType::SEQUENCE);
+	lookForTreasure->addChild(targetTreasureAction);
+	lookForTreasure->addChild(blinkAction);
+	lookForTreasure->addChild(isTreasureReachedAction);
+	lookForTreasure->addChild(stopBlinkAction);
+
+	BT* wander = new BT("wander", NodeType::SEQUENCE);
+	BT* inverter = new BT("not", NodeType::INVERTER);
+	inverter->addChild(isBusyAction);
+	wander->addChild(inverter);
+	wander->addChild(targetRandomAction);
+
+	BT* general = new BT("general", NodeType::SELECTOR);
+	general->addChild(lookForTreasure);
+	general->addChild(wander);
+	general->addChild(moveAction);
+
+	this->behaviourTree = general;
+	this->behaviourTree->print();
+}
+
 ValueBT Droid::action(int idAction) {
 	ValueBT value = ValueBT::SUCCESS;
 
@@ -155,14 +190,32 @@ ValueBT Droid::wanderAction() {
 ValueBT Droid::targetTreasureAction() {
 	ValueBT value = ValueBT::FAIL;
 
-	Cell* treasure = this->grid->getNearestTreasure(this->getCurrentCell(), (int)this->radius);
-	if (treasure != nullptr) {
-		if (this->setTarget(treasure)) {
-			value = ValueBT::SUCCESS;
+	vector<Cell*> treasures = this->grid->getTreasuresInRange(this->getCurrentCell(), (int)this->radius);
+
+	//	show all treasures in range
+	for (Cell* t : treasures) {
+		this->grid->drawCell(t, { 255, 0, 0, SDL_ALPHA_OPAQUE });
+	}
+
+	if (treasures.size() > 0) {
+		Cell* treasure = nullptr;
+		int g = 10000000;
+		for (Cell* t : treasures) {
+			if (this->setTarget(t)) {
+				int otherG = this->path.getLength();
+				if (otherG < g) {
+					g = otherG;
+					treasure = t;
+				}
+			}
+			else {
+				this->grid->removeTreasure(t);	//	remove inaccessible treasure
+			}
 		}
-		else {
-			this->grid->removeTreasure(treasure);	//	remove inaccessible treasure
-			value = ValueBT::FAIL;
+		if (treasure != nullptr) {
+			this->setTarget(treasure);
+			value = ValueBT::SUCCESS;
+
 		}
 	}
 
@@ -173,9 +226,9 @@ ValueBT Droid::isTreasureReachedAction() {
 	ValueBT value = ValueBT::FAIL;
 
 	Cell* current = this->getCurrentCell();
-	Cell* treasure = this->grid->getNearestTreasure(current, (int)this->radius);
-	if (treasure != nullptr && treasure == current) {
-		this->grid->removeTreasure(treasure);
+
+	if (this->grid->isTreasure(current)) {
+		this->grid->removeTreasure(current);
 		value = ValueBT::SUCCESS;
 	}
 
