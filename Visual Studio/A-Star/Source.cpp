@@ -1,5 +1,6 @@
 #include <iostream>
 #include <time.h>
+#include <string.h>
 using namespace std;
 
 #include <SDL.h>
@@ -20,6 +21,9 @@ constexpr auto WIDTH = 1000, HEIGHT = 800;
 #include "AStar.h"
 #include "Droid.h"
 #include "BT.h"
+#include "../lib_Font/Font.h"
+#include "../lib_Button/Button.h"
+#include "../lib_Slider/Slider.h"
 
 SDL_Renderer* init_SDL(const char* title) {
 #pragma region SDL initialization
@@ -74,7 +78,7 @@ int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
 
 	/*	prepare useful objects here	*/
-	Grid grid(renderer, SDL_Rect{ 20, 20, WIDTH - 200, HEIGHT - 40 }, 30, 30);
+	Grid grid(renderer, SDL_Rect{ 20, 25, WIDTH - 200, HEIGHT - 40 }, 30, 30);
 	double precentOfWalls = 30.0;
 	grid.createWalls(precentOfWalls);		//	percentage of walls
 	grid.createTreasures(10);	//	number of treasures
@@ -82,6 +86,21 @@ int main(int argc, char** argv) {
 
 	Droid myDroid(&grid, grid.cellToPoint(grid.getRandomEmptyNonTreasureCell()), 15, 0.1);
 	myDroid.getBehaviourTree();
+
+	//	other pane
+	int xOtherPane = WIDTH - 200 + 10;
+	int yOtherPane = HEIGHT / 2 - 50;
+	int yOffset = 0;
+
+	Font font("C:\\Windows\\Fonts\\arial.ttf", 20);
+	yOffset += 40;
+	Button button("neighbour", "Neighbourhood", xOtherPane, yOtherPane + yOffset, 150, 25);
+	button.addListener(&myDroid);
+	yOffset += 40;
+	Slider sld_deltaAlphaLerp(xOtherPane, yOtherPane + yOffset, 150, 0.05, 1, 0.1);
+	yOffset += 40;
+	Slider sld_radius(xOtherPane, yOtherPane + yOffset, 150, 0, 30, 10);
+
 
 	//	*********  //
 	//	main loop  //
@@ -101,7 +120,14 @@ int main(int argc, char** argv) {
 		}
 
 		myDroid.behave();
+		myDroid.setDeltaAlphaLerp(sld_deltaAlphaLerp.getValue());
+		myDroid.setRadius(sld_radius.getValue());
 		myDroid.draw(renderer);
+
+		char str[100];
+		sprintf_s(str, "Treasures left : %d", grid.treasuresLeft());
+		font.print(renderer, xOtherPane, yOtherPane, str, { 255, 255, 255, SDL_ALPHA_OPAQUE }, false);
+		button.draw(renderer);
 
 		//	****************  //
 		//	event management  //
@@ -113,6 +139,10 @@ int main(int argc, char** argv) {
 			grid.createWalls(precentOfWalls);		//	percentage of walls
 			grid.createTreasures(10);	//	number of treasures
 		}
+		button.update(event);
+		sld_deltaAlphaLerp.draw(renderer, event);
+		sld_radius.draw(renderer, event);
+
 		endOfGame = keypressed(event, 'q');
 
 		showRenderingBuffer(renderer);
