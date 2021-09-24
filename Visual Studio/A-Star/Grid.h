@@ -19,9 +19,8 @@ private:
 
 	int widthCell, heightCell;
 
-	bool* walls;
 	map<int, Cell*> treasures;
-	map<int, Cell*> allCells;
+	Cell** allCells;
 
 public:
 	Grid(SDL_Renderer* renderer, SDL_Rect area, int nbRows, int nbColumns);
@@ -35,10 +34,11 @@ public:
 	int getIdCell(Cell* cell) const;
 	Cell* getCell(int row, int column);
 	bool isPointInGrid(Point* screenPoint) const;
-	Cell* PointToCell(Point* screenPoint);
+	bool isInGrid(int row, int col) const;
+	Cell* pointToCell(Point* screenPoint);
 	Point cellToPoint(Cell *cell) const;
-	Cell* getRandomCellNonWall();
 	Cell* getRandomEmptyCell();
+	Cell* getRandomEmptyNonTreasureCell();
 	vector<Cell* > getNeighbours(Cell* cell);
 	int getSizeCell() const;
 

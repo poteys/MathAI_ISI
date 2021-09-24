@@ -19,9 +19,6 @@ Grid::Grid(SDL_Renderer* renderer, SDL_Rect area, int nbRows, int nbColumns) {
 	this->area.w = this->nbColumns * this->widthCell;
 	this->area.h = this->nbRows * this->heightCell;
 
-	this->walls = new bool[(long long)this->nbRows * this->nbColumns];
-	this->eraseWalls();
-
 	this->createAllCells();
 }
 
@@ -35,6 +32,7 @@ int Grid::getNbColumns() const {
 
 //	managing cells
 void Grid::createAllCells() {
+	this->allCells = new Cell*[this->nbRows * this->nbColumns];
 	int i = 0;
 	for (int row = 0; row < this->nbRows; row++) {
 		for (int col = 0; col < this->nbColumns; col++) {
@@ -61,7 +59,11 @@ bool Grid::isPointInGrid(Point* screenPoint) const {
 		screenPoint->y >= this->area.y && screenPoint->y < (double)this->area.y + this->area.h - 1;
 }
 
-Cell* Grid::PointToCell(Point* screenPoint) {
+bool Grid::isInGrid(int row, int col) const {
+	return row >= 0 && row < this->nbRows && col >= 0 && col < this->nbColumns;
+}
+
+Cell* Grid::pointToCell(Point* screenPoint) {
 	Cell* cell = nullptr;
 
 	if (this->isPointInGrid(screenPoint)) {
@@ -74,24 +76,24 @@ Cell* Grid::PointToCell(Point* screenPoint) {
 }
 
 Point Grid::cellToPoint(Cell *cell) const {
-	return Point(this->area.x + this->widthCell * cell->getCol() + this->widthCell / 2,
-		this->area.y + this->heightCell * cell->getRow() + this->heightCell / 2);
+	return Point(this->area.x + this->widthCell * (cell->getCol() + 0.5),
+		this->area.y + this->heightCell * (cell->getRow() + 0.5));
 }
 
-Cell* Grid::getRandomCellNonWall() {
+Cell* Grid::getRandomEmptyCell() {
 	int row, column;
 	do {
 		row = rand() % this->nbRows;
 		column = rand() % this->nbColumns;
-	} while (walls[this->getIdCell(row, column)]);
+	} while (this->allCells[this->getIdCell(row, column)]->getType() != CellType::EMPTY);
 
 	return this->getCell(row, column);
 }
 
-Cell* Grid::getRandomEmptyCell() {
+Cell* Grid::getRandomEmptyNonTreasureCell() {
 	Cell* cell;
 	do {
-		cell = this->getRandomCellNonWall();
+		cell = this->getRandomEmptyCell();
 	} while (treasures.count(this->getIdCell(cell)) == 1);
 
 	return cell;
@@ -106,7 +108,7 @@ vector<Cell*> Grid::getNeighbours(Cell* cell) {
 		int row = cell->getRow() + dRow[i];
 		int col = cell->getCol() + dCol[i];
 
-		if ((row >= 0 && row < this->nbRows && col >= 0 && col < this->nbColumns) && !walls[this->getIdCell(row, col)]) {
+		if (this->isInGrid(row, col) && this->allCells[this->getIdCell(row, col)]->getType() != CellType::WALL) {
 			neighbours.push_back(this->getCell(row, col));
 		}
 	}
@@ -121,7 +123,7 @@ int Grid::getSizeCell() const {
 //	managing walls
 void Grid::eraseWalls() {
 	for (int i = 0; i < this->nbRows * this->nbColumns; i++) {
-		this->walls[i] = false;
+		this->allCells[i]->setType(CellType::EMPTY);
 	}
 }
 
@@ -130,12 +132,12 @@ void Grid::createWalls(double percent) {
 
 	int nbWalls = (int)(this->nbRows * this->nbColumns * percent / 100);
 	for (int i = 0; i < nbWalls; i++) {
-		walls[this->getIdCell(this->getRandomCellNonWall())] = true;
+		this->allCells[this->getIdCell(this->getRandomEmptyNonTreasureCell())]->setType(CellType::WALL);
 	}
 }
 
 bool Grid::isWall(int row, int col) const {
-	return this->walls[this->getIdCell(row, col)];
+	return this->allCells[this->getIdCell(row, col)]->getType() == CellType::WALL;
 }
 
 //	managing treasures
@@ -146,7 +148,7 @@ void Grid::createTreasures(int nbTreasures) {
 
 void Grid::addTreasures(int nbTreasures) {
 	for (int i = 0; i < nbTreasures; i++) {
-		Cell* cell = this->getRandomEmptyCell();
+		Cell* cell = this->getRandomEmptyNonTreasureCell();
 		treasures[this->getIdCell(cell)] = cell;
 	}
 }
@@ -182,7 +184,7 @@ void Grid::drawCells() {
 	int idCell = 0;
 	for (int row = 0; row < this->nbRows; row++) {
 		for (int column = 0; column < this->nbColumns; column++) {
-			SDL_Color color = walls[idCell] ? wallColor : nonWallColor;
+			SDL_Color color = this->allCells[idCell]->getType() == CellType::WALL ? wallColor : nonWallColor;
 			this->drawCell(this->allCells[idCell], color);
 			idCell++;
 		}
@@ -190,11 +192,9 @@ void Grid::drawCells() {
 }
 
 void Grid::drawCell(Cell* cell, SDL_Color colorInside, SDL_Color borderColor) const {
-	int widthCell = (int)((double)this->area.w / this->nbColumns);
-	int heightCell = (int)((double)this->area.h / this->nbRows);
-	int x = this->area.x + cell->getCol() * widthCell;
-	int y = this->area.y + cell->getRow() * heightCell;
-	SDL_Rect rect = { x, y, widthCell + 1, heightCell + 1 };
+	int x = this->area.x + cell->getCol() * this->widthCell;
+	int y = this->area.y + cell->getRow() * this->heightCell;
+	SDL_Rect rect = { x, y,this->widthCell + 1, this->heightCell + 1 };
 	SDL_SetRenderDrawColor(this->renderer, borderColor.r, borderColor.g, borderColor.b, borderColor.a);
 	SDL_RenderDrawRect(this->renderer, &rect);
 
@@ -212,4 +212,3 @@ void Grid::drawTreasures() const {
 		this->drawCell(cell, treasureColor);
 	}
 }
-
