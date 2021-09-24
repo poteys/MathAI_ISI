@@ -157,17 +157,21 @@ void Grid::removeTreasure(Cell * cell) {
 	this->treasures.erase(this->getIdCell(cell));
 }
 
-Cell * Grid::getNearestTreasure(Cell* cell, int radius) const {
-	Cell* nearestTreasure = nullptr;
+bool Grid::isTreasure(Cell* cell) const {
+	return this->treasures.count(this->getIdCell(cell)) == 1;
+}
+
+vector<Cell*> Grid::getTreasuresInRange(Cell* cell, int radius) const {
+	vector<Cell*> treasures;
 
 	for (auto pair : this->treasures) {
 		Cell* treasure = pair.second;
-		if (nearestTreasure == nullptr ||
-			cell->getDistance(treasure) < cell->getDistance(nearestTreasure)) {
-			nearestTreasure = treasure;
+		if (cell->getDistance(treasure) < radius) {
+			treasures.push_back(treasure);
 		}
 	}
-	return (nearestTreasure != nullptr && cell->getDistance(nearestTreasure) <= radius) ? nearestTreasure : nullptr;
+
+	return treasures;
 }
 
 int Grid::treasuresLeft() const {

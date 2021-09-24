@@ -51,7 +51,8 @@ public:
 	void createTreasures(int nbTreasures);
 	void addTreasures(int nbTreasures);
 	void removeTreasure(Cell* cell);
-	Cell* getNearestTreasure(Cell* cell, int radius) const;
+	bool isTreasure(Cell* cell) const;
+	vector<Cell*> getTreasuresInRange(Cell* cell, int radius) const;
 	int treasuresLeft() const;
 
 	//	drawing
