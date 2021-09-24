@@ -12,6 +12,10 @@ Font::Font(const char * fontPath, int size) {
 		TTF_Init();		//	init True Type Font librarie
 		Font::initDone = true;
 		Font::font = TTF_OpenFont(fontPath, size);
+
+		if (Font::font == NULL) {
+			throw new exception("unsupported font");
+		}
 	}
 
 
@@ -20,6 +24,8 @@ Font::Font(const char * fontPath, int size) {
 
 void Font::print(SDL_Renderer * renderer, int x, int y, string str, SDL_Color color, bool center) {
 	if (this->str != str.c_str()) {
+		this->str = str;
+
 		//	free memory
 		SDL_DestroyTexture(this->texture);
 		SDL_FreeSurface(this->surface);
