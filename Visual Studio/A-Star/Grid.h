@@ -39,7 +39,7 @@ public:
 	Point cellToPoint(Cell *cell) const;
 	Cell* getRandomEmptyCell();
 	Cell* getRandomEmptyNonTreasureCell();
-	vector<Cell* > getNeighbours(Cell* cell);
+	vector<Cell* > getNeighbours(Cell* cell, bool fourNeighboursMode);
 	int getSizeCell() const;
 
 	//	managing walls

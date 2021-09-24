@@ -99,12 +99,17 @@ Cell* Grid::getRandomEmptyNonTreasureCell() {
 	return cell;
 }
 
-vector<Cell*> Grid::getNeighbours(Cell* cell) {
+vector<Cell*> Grid::getNeighbours(Cell* cell, bool fourNeighboursMode) {
 	vector<Cell*> neighbours;
-	int dRow[] = { -1, 0, 0, 1 };
-	int dCol[] = { 0, -1, +1, 0 };
+	int dRow[] = { -1, 0, 0, 1, -1, -1, +1, +1 };
+	int dCol[] = { 0, -1, +1, 0, -1, +1, -1, +1 };
 
-	for (int i = 0; i < 4; i++) {
+	int nbNeighboursToCheck = 4;
+	if (!fourNeighboursMode) {
+		nbNeighboursToCheck = 8;
+	}
+
+	for (int i = 0; i < nbNeighboursToCheck; i++) {
 		int row = cell->getRow() + dRow[i];
 		int col = cell->getCol() + dCol[i];
 
