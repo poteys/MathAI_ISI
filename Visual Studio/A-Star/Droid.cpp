@@ -12,7 +12,7 @@ const int Droid::BLINK = 5;
 const int Droid::STOP_BLINK = 6;
 
 Cell * Droid::getCurrentCell() {
-	return this->grid->PointToCell(&this->getPosition());
+	return this->grid->pointToCell(&this->getPosition());
 }
 
 Droid::Droid(Grid* grid, Point position, int delay, double deltaAlphaLerp)
@@ -44,7 +44,7 @@ void Droid::setPosition(Point position) {
 	this->position = position;
 }
 
-void Droid::setPath(ListCells* path) {
+void Droid::setPath(Path* path) {
 	this->path = *path;
 }
 
@@ -102,7 +102,7 @@ bool Droid::setTarget(Cell * target) {
 	bool value = false;
 
 	Cell* current = this->getCurrentCell();
-	ListCells path = myAstar.shortestPath(current, target);
+	Path path = myAstar.shortestPath(current, target);
 	if (!path.isEmpty()) {
 		path.getAndRemoveNextCell();
 		this->setPath(&path);
@@ -147,7 +147,7 @@ ValueBT Droid::isBusyAction() {
 }
 
 ValueBT Droid::wanderAction() {
-	Cell* randomTarget = this->grid->getRandomCellNonWall();
+	Cell* randomTarget = this->grid->getRandomEmptyNonTreasureCell();
 	this->setTarget(randomTarget);
 	return ValueBT::SUCCESS;
 }

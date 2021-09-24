@@ -20,8 +20,8 @@ Node* AStar::findBestInOpenList() {
 	return bestNode;
 }
 
-ListCells AStar::generateFinalPath(Node* n) {
-	ListCells path;
+Path AStar::generateFinalPath(Node* n) {
+	Path path;
 
 	//	create path from end to start, using predecessor information
 	while (n->getPredecessor() != nullptr) {
@@ -68,8 +68,8 @@ AStar::AStar(Grid * grid) {
 	}
 }
 
-ListCells AStar::shortestPath(Cell* start, Cell* end) {
-	ListCells path;
+Path AStar::shortestPath(Cell* start, Cell* end) {
+	Path path;
 	bool targetReached = false;
 
 	Node* node = this->getNodeFromPool(start, nullptr, end);

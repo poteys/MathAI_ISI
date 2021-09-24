@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
 	grid.createTreasures(10);	//	number of treasures
 	Timer timerSpawnTreasure(1000);
 
-	Droid myDroid(&grid, grid.cellToPoint(grid.getRandomCellNonWall()), 15, 0.1);
+	Droid myDroid(&grid, grid.cellToPoint(grid.getRandomEmptyNonTreasureCell()), 15, 0.1);
 
 	//	Behaviour tree
 	BT* isBusy = new BT("is busy", &myDroid, Droid::IS_BUSY);
@@ -96,6 +96,11 @@ int main(int argc, char** argv) {
 	BT* selector = new BT("general behaviour", NodeType::SELECTOR);
 	selector->addChild(sequence);
 	selector->addChild(wander);
+
+
+
+
+
 
 	BT* theBT = selector;
 	theBT->print();
@@ -122,11 +127,11 @@ int main(int argc, char** argv) {
 				myDroid.action(Droid::STOP_BLINK);
 			}
 		}
-		else if (myDroid.action(Droid::IS_BUSY) == ValueBT::FAIL) {
-			myDroid.action(Droid::WANDER);
+		else if (myDroid.action(Droid::IS_BUSY) == ValueBT::SUCCESS) {
+			myDroid.action(Droid::MOVE);
 		}
 		else {
-			myDroid.action(Droid::MOVE);
+			myDroid.action(Droid::WANDER);
 		}
 
 		//if (grid.treasuresLeft() < 10) {

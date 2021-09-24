@@ -6,6 +6,7 @@
 Cell::Cell(int row, int column) {
 	this->row = row;
 	this->column = column;
+	this->type = CellType::EMPTY;
 }
 
 int Cell::getRow() const {
@@ -14,6 +15,14 @@ int Cell::getRow() const {
 
 int Cell::getCol() const {
 	return this->column;
+}
+
+CellType Cell::getType() const {
+	return this->type;
+}
+
+void Cell::setType(CellType type) {
+	this->type = type;
 }
 
 double Cell::getDistance(Cell* cell) const {

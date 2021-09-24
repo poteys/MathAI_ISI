@@ -14,7 +14,7 @@ private:
 	Grid *grid;
 	Point position;
 
-	ListCells path;
+	Path path;
 
 	double radius = 5;	//	10 cells radius for radar
 
@@ -38,7 +38,7 @@ public:
 	bool hasPathToGo();
 	Point getPosition();
 	void setPosition(Point position);
-	void setPath(ListCells *path);
+	void setPath(Path *path);
 	void lerp();
 	void move();
 	void manageBlinking();
