@@ -1,7 +1,10 @@
 #include "BT.h"
 #include "NodeType.h"
 #include <iostream>
+#include <exception>
 using namespace std;
+
+#define ASSERT(predicat, errorMessage) if (!(predicat)) { throw exception(errorMessage); }
 
 void BT::print(int offset) {
 	if (this->type == NodeType::ACTION) {
@@ -14,6 +17,9 @@ void BT::print(int offset) {
 		}
 		else if (this->type == NodeType::SEQUENCE) {
 			type = "SEQUENCE";
+		}
+		else if (this->type == NodeType::INVERTER) {
+			type = "INVERTER";
 		}
 		cout << string(offset, ' ').c_str() << type.c_str() << "(" << this->label.c_str() << ")" << endl;
 
@@ -46,6 +52,8 @@ ValueBT BT::eval() {
 		return this->actor->action(this->idAction);
 	}
 	else if (this->type == NodeType::SELECTOR) {
+		ASSERT(this->children.size() > 0, "SELECTOR node must have at least one child");
+
 		for (BT* child : this->children) {
 			value = child->eval();
 			if (value != ValueBT::FAIL) {
@@ -54,12 +62,21 @@ ValueBT BT::eval() {
 		}
 	}
 	else if (this->type == NodeType::SEQUENCE) {
+		ASSERT(this->children.size() > 0, "SEQUENCE node must have at least one child");
+
 		for (BT* child : this->children) {
 			value = child->eval();
 			if (value != ValueBT::SUCCESS) {
 				break;
 			}
 		}
+	}
+	else  if (this->type == NodeType::INVERTER) {
+		ASSERT(this->children.size() == 1, "INVERTER node must have one child");
+
+		value = this->children[0]->eval();
+		if (value == ValueBT::FAIL) { value = ValueBT::SUCCESS; }
+		else if (value == ValueBT::SUCCESS) { value = ValueBT::FAIL; }
 	}
 	else {
 		throw new exception("Node type not implemented!");
