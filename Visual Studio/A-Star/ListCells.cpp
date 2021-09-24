@@ -1,22 +1,22 @@
 #include "ListCells.h"
 
-void ListCells::addCell(Cell* cell) {
+void Path::addCell(Cell* cell) {
 	this->cells.push_back(cell);
 }
 
-int ListCells::getLength() const {
+int Path::getLength() const {
 	return (int)this->cells.size();
 }
 
-bool ListCells::isEmpty() const {
+bool Path::isEmpty() const {
 	return this->cells.size() == 0;
 }
 
-Cell * ListCells::getCellAt(int index) const {
+Cell * Path::getCellAt(int index) const {
 	return this->cells[index];
 }
 
-Cell* ListCells::getAndRemoveNextCell() {
+Cell* Path::getAndRemoveNextCell() {
 	Cell* cell = nullptr;
 
 	if (this->cells.size() != 0) {
@@ -27,6 +27,6 @@ Cell* ListCells::getAndRemoveNextCell() {
 	return cell;
 }
 
-void ListCells::clear() {
+void Path::clear() {
 	this->cells.clear();
 }

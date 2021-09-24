@@ -4,7 +4,7 @@
 #include <vector>
 using namespace std;
 
-class ListCells {
+class Path {
 private:
 	vector<Cell*> cells;
 public:
