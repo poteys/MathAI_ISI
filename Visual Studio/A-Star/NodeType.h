@@ -2,6 +2,7 @@
 enum class NodeType {
 	ACTION,
 	SEQUENCE,
-	SELECTOR
+	SELECTOR,
+	INVERTER
 };
 
