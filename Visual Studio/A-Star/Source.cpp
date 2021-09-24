@@ -10,7 +10,7 @@ using namespace std;
 //	- position and size on screen
 constexpr auto POS_X = 50, POS_Y = 50;
 //constexpr auto WIDTH = 1800, HEIGHT = 900;
-constexpr auto WIDTH = 800, HEIGHT = 800;
+constexpr auto WIDTH = 1000, HEIGHT = 800;
 
 //	include desired header files for libraries
 #include "../lib_Point/Point.h"
@@ -74,36 +74,14 @@ int main(int argc, char** argv) {
 	SDL_Renderer* renderer = init_SDL("SLD template");	//	this object will draw in our window
 
 	/*	prepare useful objects here	*/
-	Point target(WIDTH / 2, HEIGHT / 2, true);
-	int xOffset = 20, yOffset = 20;
-	Grid grid(renderer, SDL_Rect{ xOffset, yOffset, WIDTH - 2 * xOffset, HEIGHT - 2 * yOffset }, 30, 30);
+	Grid grid(renderer, SDL_Rect{ 20, 20, WIDTH - 200, HEIGHT - 40 }, 30, 30);
 	double precentOfWalls = 30.0;
 	grid.createWalls(precentOfWalls);		//	percentage of walls
 	grid.createTreasures(10);	//	number of treasures
 	Timer timerSpawnTreasure(1000);
 
 	Droid myDroid(&grid, grid.cellToPoint(grid.getRandomEmptyNonTreasureCell()), 15, 0.1);
-
-	//	Behaviour tree
-	BT* isBusy = new BT("is busy", &myDroid, Droid::IS_BUSY);
-	BT* move = new BT("move", &myDroid, Droid::MOVE);
-	BT* wander = new BT("wander", &myDroid, Droid::WANDER);
-
-	BT* sequence = new BT("wander behaviour", NodeType::SEQUENCE);
-	sequence->addChild(isBusy);
-	sequence->addChild(move);
-
-	BT* selector = new BT("general behaviour", NodeType::SELECTOR);
-	selector->addChild(sequence);
-	selector->addChild(wander);
-
-
-
-
-
-
-	BT* theBT = selector;
-	theBT->print();
+	myDroid.getBehaviourTree();
 
 	//	*********  //
 	//	main loop  //
@@ -118,28 +96,11 @@ int main(int argc, char** argv) {
 		/*	draw any desired graphical objects here	*/
 		grid.draw();
 
-		if (myDroid.action(Droid::TARGET_TREASURE) == ValueBT::SUCCESS) {
-			myDroid.action(Droid::BLINK);
-			if (myDroid.action(Droid::IS_TREASURE_REACHED) == ValueBT::FAIL) {
-				myDroid.action(Droid::MOVE);
-			}
-			else {
-				myDroid.action(Droid::STOP_BLINK);
-			}
-		}
-		else if (myDroid.action(Droid::IS_BUSY) == ValueBT::SUCCESS) {
-			myDroid.action(Droid::MOVE);
-		}
-		else {
-			myDroid.action(Droid::WANDER);
-		}
-
-		//if (grid.treasuresLeft() < 10) {
 		if (timerSpawnTreasure.isReady()) {
 			grid.addTreasures(1);
 		}
-		//theBT->eval();
 
+		myDroid.behave();
 		myDroid.draw(renderer);
 
 		//	****************  //
@@ -148,7 +109,6 @@ int main(int argc, char** argv) {
 		SDL_Event event = getNextEvent();
 
 		/*	give event to objects for update if needed here	*/
-		target.update(event);
 		if (keypressed(event, 'r')) {
 			grid.createWalls(precentOfWalls);		//	percentage of walls
 			grid.createTreasures(10);	//	number of treasures
