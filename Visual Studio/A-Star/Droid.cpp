@@ -33,6 +33,14 @@ Droid::Droid(Grid* grid, Point position, int delay, double deltaAlphaLerp)
 	this->currentRadius = this->radiusMax;
 }
 
+void Droid::setDeltaAlphaLerp(double deltaAlphaLerp) {
+	this->deltaAlphaLerp = deltaAlphaLerp;
+}
+
+void Droid::setRadius(double radius) {
+	this->radius = radius;
+}
+
 bool Droid::hasPathToGo() {
 	return !this->path.isEmpty();
 }
@@ -107,7 +115,7 @@ bool Droid::setTarget(Cell * target) {
 	bool value = false;
 
 	Cell* current = this->getCurrentCell();
-	Path path = myAstar.shortestPath(current, target);
+	Path path = myAstar.shortestPath(current, target, this->fourNeighboursMode);
 	if (!path.isEmpty()) {
 		path.getAndRemoveNextCell();
 		this->setPath(&path);
@@ -121,6 +129,10 @@ void Droid::drawTarget() {
 		Cell* target = this->path.getCellAt(0);
 		grid->drawCell(target, { 0, 200, 50, SDL_ALPHA_OPAQUE });
 	}
+}
+
+void Droid::buttonPushed(void * source) {
+	fourNeighboursMode = !fourNeighboursMode;
 }
 
 void Droid::getBehaviourTree() {

@@ -7,17 +7,20 @@
 #include "IActor.h"
 #include "ValueBT.h"
 #include "../lib_Timer/Timer.h"
+#include "../lib_Button/Button.h"
 #include "BT.h"
 
-class Droid : public IActor {
+class Droid : public IActor, public IButtonListener {
 private:
 	AStar myAstar;
 	Grid *grid;
 	Point position;
 
+	bool fourNeighboursMode = true;
+
 	Path path;
 
-	double radius = 5;	//	10 cells radius for radar
+	double radius = 5;
 
 	bool blinking;
 	double radiusMin, radiusMax, currentRadius;
@@ -38,6 +41,8 @@ public:
 	static const int MOVE, IS_BUSY, WANDER, TARGET_TREASURE, IS_TREASURE_REACHED, BLINK, STOP_BLINK;
 
 	Droid(Grid* grid, Point position, int delay = 20, double deltaAlphaLerp = 0.1);
+	void setDeltaAlphaLerp(double deltaAlphaLerp);
+	void setRadius(double radius);
 	bool hasPathToGo();
 	Point getPosition();
 	void setPosition(Point position);
@@ -50,6 +55,8 @@ public:
 
 	bool setTarget(Cell* target);
 	void drawTarget();
+
+	void buttonPushed(void *source);
 
 	void getBehaviourTree();
 
