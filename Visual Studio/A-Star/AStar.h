@@ -22,6 +22,6 @@ private:
 
 public:
 	AStar(Grid *grid);
-	Path shortestPath(Cell* start, Cell* end);
+	Path shortestPath(Cell* start, Cell* end, bool fourNeighboursMode);
 };
 

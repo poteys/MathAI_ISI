@@ -68,7 +68,7 @@ AStar::AStar(Grid * grid) {
 	}
 }
 
-Path AStar::shortestPath(Cell* start, Cell* end) {
+Path AStar::shortestPath(Cell* start, Cell* end, bool fourNeighboursMode) {
 	Path path;
 	bool targetReached = false;
 
@@ -87,7 +87,7 @@ Path AStar::shortestPath(Cell* start, Cell* end) {
 			targetReached = true;
 		}
 		else {
-			vector<Cell*> neighbours = grid->getNeighbours(n->getCell());
+			vector<Cell*> neighbours = grid->getNeighbours(n->getCell(), fourNeighboursMode);
 
 			for (Cell* neighbour : neighbours) {
 				if (this->closedList.count(neighbour) == 0) {
