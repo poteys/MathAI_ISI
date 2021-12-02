@@ -18,7 +18,6 @@ Font::Font(const char* fontPath, int size) {
 		}
 	}
 
-
 	Font::nbInstances++;
 }
 
@@ -35,8 +34,8 @@ void Font::print(SDL_Renderer* renderer, int x, int y, string str, SDL_Color col
 
 		SDL_QueryTexture(texture, NULL, NULL, &this->texW, &this->texH);
 	}
-	if (!center) {
 
+	if (!center) {
 		this->dstrect = { x, y, texW, texH };
 	}
 	else {
@@ -55,6 +54,7 @@ Font::~Font() {
 	if (Font::nbInstances == 0) {
 		TTF_CloseFont(font);
 		TTF_Quit();
+		Font::initDone = false;
 	}
 }
 
