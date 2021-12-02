@@ -13,7 +13,7 @@ const int Droid::BLINK = 5;
 const int Droid::STOP_BLINK = 6;
 
 Cell * Droid::getCurrentCell() {
-	return this->grid->pointToCell(&this->getPosition());
+	return this->grid->pointToCell(&(this->getPosition()));
 }
 
 Droid::Droid(Grid* grid, Point position, int delay, double deltaAlphaLerp)

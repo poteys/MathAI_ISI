@@ -3,6 +3,7 @@
 #include "NodeType.h"
 #include "IActor.h"
 #include <vector>
+#include <string>
 using namespace std;
 
 class BT {

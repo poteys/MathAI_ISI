@@ -9,7 +9,7 @@ using namespace std;
 //	window attributs  //
 //	****************  //
 //	- position and size on screen
-constexpr auto POS_X = -1000, POS_Y = 50;
+constexpr auto POS_X = 0, POS_Y = 50;
 constexpr auto WIDTH = 800, HEIGHT = 800;
 
 SDL_Renderer* renderer;
