@@ -3,11 +3,11 @@
 #include <iostream>
 using namespace std;
 
-TTF_Font * Font::font = nullptr;
+TTF_Font* Font::font = nullptr;
 bool Font::initDone = false;
 int Font::nbInstances = 0;
 
-Font::Font(const char * fontPath, int size) {
+Font::Font(const char* fontPath, int size) {
 	if (!Font::initDone) {
 		TTF_Init();		//	init True Type Font librarie
 		Font::initDone = true;
@@ -22,7 +22,7 @@ Font::Font(const char * fontPath, int size) {
 	Font::nbInstances++;
 }
 
-void Font::print(SDL_Renderer * renderer, int x, int y, string str, SDL_Color color, bool center) {
+void Font::print(SDL_Renderer* renderer, int x, int y, string str, SDL_Color color, bool center) {
 	if (this->str != str.c_str()) {
 		this->str = str;
 
@@ -34,13 +34,13 @@ void Font::print(SDL_Renderer * renderer, int x, int y, string str, SDL_Color co
 		this->texture = SDL_CreateTextureFromSurface(renderer, this->surface);
 
 		SDL_QueryTexture(texture, NULL, NULL, &this->texW, &this->texH);
-		if (!center) {
+	}
+	if (!center) {
 
-			this->dstrect = { x, y, texW, texH };
-		}
-		else {
-			this->dstrect = { x - texW / 2, y - texH / 2, texW, texH };
-		}
+		this->dstrect = { x, y, texW, texH };
+	}
+	else {
+		this->dstrect = { x - texW / 2, y - texH / 2, texW, texH };
 	}
 
 	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
